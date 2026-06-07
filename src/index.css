@@ -1,5 +1,23 @@
 @import "tailwindcss";
-@config "../tailwind.config.ts";
+
+@theme {
+  --color-navy: #0A1A3F;
+  --color-bg: #0A0A0A;
+  --color-brand: #1B4DE4;
+  --color-brandAlt: #2563EB;
+  --color-blue: #3B82F6;
+  --color-skyLight: #93C5FD;
+  --color-white: #FFFFFF;
+  --color-muted: #A0AEC0;
+
+  --font-display: "Poppins", sans-serif;
+  --font-body: "Poppins", sans-serif;
+  --font-sans: "Poppins", sans-serif;
+
+  --radius-pill: 999px;
+  --radius-card: 24px;
+  --radius-lg: 32px;
+}
 
 @layer base {
   body {
