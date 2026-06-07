@@ -23,9 +23,9 @@ export const Pilares: React.FC = () => {
           
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12 lg:mt-0">
             {pillars.map((pillar, idx) => (
-              <Reveal key={pillar.id} delay={idx * 0.15} className={`h-full ${idx % 2 === 1 ? 'sm:mt-12' : ''}`}>
+              <Reveal key={pillar.id} delay={idx * 0.15} className="h-full">
                 <Card className="h-full flex flex-col p-10 bg-bg/40 border-white/5 hover:border-brand/40 transition-all duration-500 hover:shadow-[0_10px_40px_rgba(27,77,228,0.15)] hover:-translate-y-2 group">
-                  <div className="text-brand font-display font-black text-4xl mb-6 opacity-30 group-hover:opacity-100 transition-opacity">
+                  <div className="text-brand font-display font-black text-6xl mb-6 opacity-60 group-hover:opacity-100 group-hover:text-skyLight transition-all">
                     0{idx + 1}.
                   </div>
                   <h3 className="font-display font-bold text-2xl mb-4 text-white tracking-tight">

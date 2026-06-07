@@ -11,8 +11,8 @@ export const Metricas: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12 text-center">
           {stats.map((stat) => (
             <div key={stat.id} className="flex flex-col items-center">
-              <AnimatedCounter value={stat.valor} className="text-4xl md:text-5xl lg:text-6xl text-white mb-2" />
-              <span className="text-white/80 font-medium text-sm md:text-base uppercase tracking-wider">
+              <AnimatedCounter value={stat.valor} className="text-[clamp(3rem,6vw,5.5rem)] text-white mb-2 tracking-tighter drop-shadow-md leading-none" />
+              <span className="text-white/80 font-medium text-sm md:text-base uppercase tracking-[0.2em]">
                 {stat.label}
               </span>
             </div>

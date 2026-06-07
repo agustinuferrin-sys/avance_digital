@@ -3,6 +3,7 @@ import { SectionHeading } from '../components/SectionHeading';
 import { Reveal } from '../components/Reveal';
 import { methodSteps } from '../data/methodSteps';
 import { Blob } from '../components/Blob';
+import { cn } from '../lib/utils';
 
 export const SistemaAvance: React.FC = () => {
   return (
@@ -21,12 +22,15 @@ export const SistemaAvance: React.FC = () => {
           {methodSteps.map((step, idx) => (
             <div key={step.número} className="relative flex flex-col md:flex-row items-center gap-12 md:gap-24 group">
               {/* Background giant number */}
-              <div className="absolute top-1/2 left-0 -translate-y-1/2 font-display font-black text-[clamp(10rem,30vw,25rem)] leading-none text-white/[0.02] -z-10 pointer-events-none select-none transition-transform duration-700 group-hover:scale-110 group-hover:text-brand/[0.03]">
+              <div className={cn(
+                "absolute top-1/2 -translate-y-1/2 font-display font-black text-[clamp(10rem,30vw,25rem)] leading-none text-white/[0.02] -z-10 pointer-events-none select-none transition-transform duration-700 group-hover:scale-105 group-hover:text-brand/[0.03]",
+                idx % 2 === 1 ? "md:right-0 md:left-auto left-0" : "left-0"
+              )}>
                 {step.número}
               </div>
               
               {/* Content staggered alignment */}
-              <div className={`w-full md:w-1/2 ${idx % 2 === 1 ? 'md:order-2' : ''}`}>
+              <div className={`w-full md:w-1/2 ${idx % 2 === 1 ? 'md:ml-auto' : ''}`}>
                 <Reveal delay={0.1}>
                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand/10 text-brand font-display font-bold text-2xl mb-8 backdrop-blur-md border border-brand/20 group-hover:bg-brand group-hover:text-white transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(27,77,228,0.3)]">
                       {step.número}

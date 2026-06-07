@@ -29,7 +29,7 @@ export const Hero: React.FC = () => {
           ))}
         </h1>
         <Reveal delay={0.6}>
-          <p className="text-xl md:text-3xl lg:text-4xl text-muted font-light mb-16 max-w-4xl tracking-tight">
+          <p className="text-xl md:text-3xl lg:text-4xl text-white/90 font-medium mb-16 max-w-4xl tracking-tight drop-shadow-md">
             Somos más que una agencia. Somos el socio estratégico que piensa con vos.
           </p>
         </Reveal>

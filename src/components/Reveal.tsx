@@ -12,6 +12,7 @@ export const Reveal: React.FC<RevealProps> = ({ children, width = '100%', delay 
   return (
     <div style={{ position: 'relative', width }} className={className}>
       <motion.div
+        className="h-full flex flex-col"
         variants={{
           hidden: { opacity: 0, y: 50 },
           visible: { opacity: 1, y: 0 },

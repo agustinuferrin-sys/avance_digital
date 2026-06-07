@@ -16,7 +16,7 @@ export const Servicios: React.FC = () => {
           </SectionHeading>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[280px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {services.map((service, idx) => {
             // Asymmetrical bento grid logic
             const isLarge = idx === 0 || idx === 5;
@@ -26,9 +26,9 @@ export const Servicios: React.FC = () => {
               <Reveal 
                 key={service.id} 
                 delay={idx * 0.05} 
-                className={`${isLarge ? 'md:col-span-2' : ''} ${isTall ? 'md:row-span-2' : ''}`}
+                className={`flex flex-col h-full ${isLarge ? 'md:col-span-2' : ''} ${isTall ? 'md:row-span-2' : ''}`}
               >
-                <Card className="group relative h-full flex flex-col overflow-hidden bg-navy/40 border-white/5 hover:border-brand/50 hover:bg-navy/80 transition-all duration-500">
+                <Card className="flex-1 group relative flex flex-col overflow-hidden bg-navy/40 border-white/5 hover:border-brand/50 hover:bg-navy/80 transition-all duration-500">
                   <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none mix-blend-screen" />
                   
                   <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white/5 border border-white/10 mb-8 group-hover:bg-brand group-hover:border-brand transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 group-hover:shadow-[0_0_20px_rgba(27,77,228,0.4)]">

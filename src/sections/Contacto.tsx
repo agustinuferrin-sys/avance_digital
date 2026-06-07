@@ -93,15 +93,6 @@ export const Contacto: React.FC = () => {
         </Reveal>
       </div>
 
-      <a 
-        href="https://wa.me/5491126448450" 
-        target="_blank" 
-        rel="noreferrer"
-        className="fixed bottom-8 right-8 z-50 bg-brand text-white px-6 py-4 rounded-pill flex items-center gap-3 shadow-[0_0_30px_rgba(27,77,228,0.4)] hover:scale-105 hover:bg-brandAlt transition-all"
-      >
-        <MessageCircle className="w-5 h-5" />
-        <span className="font-semibold text-sm hidden md:block tracking-wider uppercase">Escribinos</span>
-      </a>
     </section>
   );
 };
