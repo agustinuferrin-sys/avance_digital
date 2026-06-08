@@ -6,27 +6,23 @@ import { services } from '../data/services';
 
 export const Servicios: React.FC = () => {
   return (
-    <section id="servicios" className="py-48 bg-bg relative">
+    <section id="servicios" className="py-24 md:py-32 bg-bg relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand/[0.03] via-transparent to-transparent pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <Reveal>
-          <SectionHeading subtitle="LO QUE HACEMOS" className="mb-24 md:w-3/4 lg:w-2/3">
+          <SectionHeading subtitle="LO QUE HACEMOS" className="mb-16 md:w-3/4 lg:w-2/3">
             Ecosistema de soluciones para <span className="text-brand">potenciar tu marca</span>.
           </SectionHeading>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, idx) => {
-            // Asymmetrical bento grid logic
-            const isLarge = idx === 0 || idx === 5;
-            const isTall = idx === 2;
-
             return (
               <Reveal 
                 key={service.id} 
                 delay={idx * 0.05} 
-                className={`flex flex-col h-full ${isLarge ? 'md:col-span-2' : ''} ${isTall ? 'md:row-span-2' : ''}`}
+                className="flex flex-col h-full"
               >
                 <Card className="flex-1 group relative flex flex-col overflow-hidden bg-navy/40 border-white/5 hover:border-brand/50 hover:bg-navy/80 transition-all duration-500">
                   <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none mix-blend-screen" />
@@ -36,7 +32,7 @@ export const Servicios: React.FC = () => {
                   </div>
                   
                   <div className="mt-auto">
-                    <h3 className="font-display font-bold text-2xl mb-3 text-white tracking-tight">
+                    <h3 className="font-display font-bold text-xl mb-3 text-white tracking-tight">
                       {service.nombre}
                     </h3>
                     <p className="text-muted leading-relaxed font-light">

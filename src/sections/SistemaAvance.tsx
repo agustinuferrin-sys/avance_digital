@@ -7,23 +7,23 @@ import { cn } from '../lib/utils';
 
 export const SistemaAvance: React.FC = () => {
   return (
-    <section id="sistema" className="py-40 bg-navy relative overflow-hidden">
+    <section id="sistema" className="py-24 md:py-32 bg-navy relative overflow-hidden">
       <Blob className="-right-64 top-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[150px]" delay={1} />
       <Blob className="-left-64 top-1/4 w-[600px] h-[600px] blur-[120px] opacity-30" delay={3} />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <Reveal>
-          <SectionHeading subtitle="MÉTODO" className="mb-32">
+          <SectionHeading subtitle="MÉTODO" className="mb-20">
             SISTEMA AVANCE<span className="text-brand">®</span>
           </SectionHeading>
         </Reveal>
 
-        <div className="space-y-32 md:space-y-48">
+        <div className="space-y-24 md:space-y-32">
           {methodSteps.map((step, idx) => (
             <div key={step.número} className="relative flex flex-col md:flex-row items-center gap-12 md:gap-24 group">
               {/* Background giant number */}
               <div className={cn(
-                "absolute top-1/2 -translate-y-1/2 font-display font-black text-[clamp(10rem,30vw,25rem)] leading-none text-white/[0.02] -z-10 pointer-events-none select-none transition-transform duration-700 group-hover:scale-105 group-hover:text-brand/[0.03]",
+                "absolute top-1/2 -translate-y-1/2 font-display font-black text-[clamp(8rem,20vw,18rem)] leading-none text-white/[0.02] -z-10 pointer-events-none select-none transition-transform duration-700 group-hover:scale-105 group-hover:text-brand/[0.03]",
                 idx % 2 === 1 ? "md:right-0 md:left-auto left-0" : "left-0"
               )}>
                 {step.número}
@@ -37,12 +37,12 @@ export const SistemaAvance: React.FC = () => {
                    </div>
                 </Reveal>
                 <Reveal delay={0.2}>
-                  <h3 className="font-display font-black text-4xl md:text-5xl lg:text-6xl mb-6 text-white tracking-tight">
+                  <h3 className="font-display font-black text-3xl md:text-5xl mb-6 text-white tracking-tight">
                     {step.título}
                   </h3>
                 </Reveal>
                 <Reveal delay={0.3}>
-                  <p className="text-xl md:text-2xl text-muted font-light leading-relaxed max-w-lg">
+                  <p className="text-lg md:text-xl text-muted font-light leading-relaxed max-w-lg">
                     {step.descripción}
                   </p>
                 </Reveal>

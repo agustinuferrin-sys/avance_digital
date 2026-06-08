@@ -19,7 +19,7 @@ export const Contacto: React.FC = () => {
   };
 
   return (
-    <section id="contacto" className="py-40 bg-navy relative border-t border-white/5 overflow-hidden">
+    <section id="contacto" className="py-24 md:py-32 bg-navy relative border-t border-white/5 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand/[0.05] via-transparent to-transparent pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">

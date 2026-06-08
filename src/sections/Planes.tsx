@@ -9,12 +9,12 @@ import { cn } from '../lib/utils';
 
 export const Planes: React.FC = () => {
   return (
-    <section className="py-40 bg-bg relative">
+    <section className="py-24 md:py-32 bg-bg relative">
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-brand/20 to-transparent" />
       
       <div className="max-w-7xl mx-auto px-6">
         <Reveal>
-          <SectionHeading subtitle="INVERSIÓN" align="center" className="mb-24">
+          <SectionHeading subtitle="INVERSIÓN" align="center" className="mb-16">
             Planes a tu <span className="text-brand">medida</span>
           </SectionHeading>
         </Reveal>
@@ -42,7 +42,7 @@ export const Planes: React.FC = () => {
                     )}>
                       {plan.lema}
                     </span>
-                    <h3 className="font-display font-black text-4xl text-white mt-3 mb-4 tracking-tight">{plan.nombre}</h3>
+                    <h3 className="font-display font-black text-3xl text-white mt-3 mb-4 tracking-tight">{plan.nombre}</h3>
                     <p className="text-muted/80 font-light text-lg">{plan.descripción}</p>
                   </div>
 

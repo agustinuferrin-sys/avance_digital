@@ -21,7 +21,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
           {subtitle}
         </span>
       )}
-      <h2 className="font-display font-black text-white leading-[1.1] tracking-[-0.03em] text-[clamp(2.5rem,5vw,5rem)]">
+      <h2 className="font-display font-black text-white leading-[1.1] tracking-tight text-3xl md:text-5xl lg:text-5xl">
         {children}
       </h2>
     </div>

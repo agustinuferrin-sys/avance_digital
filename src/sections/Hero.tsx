@@ -14,7 +14,7 @@ export const Hero: React.FC = () => {
       <Blob className="bottom-1/4 -right-32 w-[500px] h-[500px] md:w-[700px] md:h-[700px] blur-[120px]" delay={2} />
       
       <div className="flex-1 flex flex-col items-center justify-center text-center px-4 max-w-7xl mx-auto z-10 relative mt-20 md:mt-0">
-        <h1 className="font-display font-black leading-[1.05] tracking-[-0.04em] mb-10 text-[clamp(3.5rem,8vw,9rem)] flex flex-wrap justify-center gap-x-[0.2em]">
+        <h1 className="font-display font-black leading-[1.05] tracking-[-0.02em] mb-8 text-5xl md:text-6xl lg:text-7xl xl:text-8xl flex flex-wrap justify-center gap-x-[0.2em]">
           {titleWords.map((word, i) => (
             <span key={i} className="overflow-hidden inline-block pb-2">
               <motion.span
@@ -29,7 +29,7 @@ export const Hero: React.FC = () => {
           ))}
         </h1>
         <Reveal delay={0.6}>
-          <p className="text-xl md:text-3xl lg:text-4xl text-white/90 font-medium mb-16 max-w-4xl tracking-tight drop-shadow-md">
+          <p className="text-xl md:text-2xl text-white/90 font-medium mb-12 max-w-3xl tracking-tight drop-shadow-md">
             Somos más que una agencia. Somos el socio estratégico que piensa con vos.
           </p>
         </Reveal>

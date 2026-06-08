@@ -29,9 +29,8 @@ export const Footer: React.FC = () => {
             <p>Alberti 1558, Mar del Plata</p>
             <a href="mailto:administracion@innstudio.com.ar" className="hover:text-brand transition-colors">info@avancedigital.com.ar</a>
             <div className="flex gap-4 mt-2">
-              <a href="#" className="hover:text-brand transition-colors">Instagram</a>
-              <a href="#" className="hover:text-brand transition-colors">LinkedIn</a>
-              <a href="#" className="hover:text-brand transition-colors">TikTok</a>
+              <a href="https://www.instagram.com/avance_world/" target="_blank" rel="noreferrer" className="hover:text-brand transition-colors">Instagram</a>
+              <a href="https://www.linkedin.com/company/agencia-de-marketing-avance/?viewAsMember=true" target="_blank" rel="noreferrer" className="hover:text-brand transition-colors">LinkedIn</a>
             </div>
           </div>
         </div>
