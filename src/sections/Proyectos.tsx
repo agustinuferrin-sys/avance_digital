@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowUpRight } from 'lucide-react';
 import { SectionHeading } from '../components/SectionHeading';
 import { Reveal } from '../components/Reveal';
 import { projects } from '../data/projects';
@@ -27,8 +29,8 @@ export const Proyectos: React.FC = () => {
                 onClick={() => setFilter(cat)}
                 className={cn(
                   "px-4 md:px-6 py-2 rounded-pill text-xs md:text-sm font-medium transition-all duration-300",
-                  filter === cat 
-                    ? "bg-brand text-white" 
+                  filter === cat
+                    ? "bg-brand text-white"
                     : "bg-white/5 text-muted hover:bg-white/10"
                 )}
               >
@@ -38,21 +40,42 @@ export const Proyectos: React.FC = () => {
           </div>
         </Reveal>
 
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {filtered.map((project, idx) => (
-            <Reveal key={project.id} delay={idx * 0.1}>
-              <div className="group relative aspect-[4/3] rounded-2xl md:rounded-card overflow-hidden bg-bg">
-                <img 
-                  src={project.imagen} 
+            <Reveal key={project.id} delay={idx * 0.08}>
+              <Link
+                to={`/proyectos/${project.slug}`}
+                className="group relative block aspect-[3/4] rounded-2xl md:rounded-card overflow-hidden bg-bg"
+              >
+                <img
+                  src={project.imagen}
                   alt={project.nombre}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 touch:grayscale-0 transition-all duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent opacity-0 group-hover:opacity-100 touch:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 md:p-8">
-                  <span className="text-brand font-semibold text-[10px] md:text-sm mb-1 md:mb-2">{project.categoría}</span>
-                  <h4 className="text-white font-display font-bold text-sm md:text-2xl">{project.nombre}</h4>
+
+                {/* Gradiente base para legibilidad */}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/20 to-transparent" />
+
+                {/* Info */}
+                <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-7">
+                  <span className="text-brand font-semibold text-xs md:text-sm tracking-wider uppercase mb-1">
+                    {project.categoría}
+                  </span>
+                  <h4 className="text-white font-display font-bold text-lg md:text-2xl leading-tight">
+                    {project.nombre}
+                  </h4>
+
+                  {/* Ver proyecto (aparece en hover / visible en touch) */}
+                  <div className="flex items-center gap-2 text-white/90 mt-3 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 touch:opacity-100 touch:translate-y-0 transition-all duration-300">
+                    <span className="text-sm font-medium">Ver proyecto</span>
+                    <ArrowUpRight className="w-4 h-4" />
+                  </div>
                 </div>
-              </div>
+
+                {/* Borde glow en hover */}
+                <div className="absolute inset-0 rounded-2xl md:rounded-card ring-1 ring-inset ring-transparent group-hover:ring-brand/40 touch:ring-brand/30 transition-all duration-500 pointer-events-none" />
+              </Link>
             </Reveal>
           ))}
         </div>
