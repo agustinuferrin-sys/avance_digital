@@ -48,7 +48,7 @@ export const Proyectos: React.FC = () => {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 md:p-8">
+                <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent opacity-0 group-hover:opacity-100 touch:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 md:p-8">
                   <span className="text-brand font-semibold text-[10px] md:text-sm mb-1 md:mb-2">{project.categoría}</span>
                   <h4 className="text-white font-display font-bold text-sm md:text-2xl">{project.nombre}</h4>
                 </div>

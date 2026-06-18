@@ -20,7 +20,7 @@ export const Navbar: React.FC = () => {
             <a href="#estrategia" className="hover:text-brand transition-colors">ESTRATEGIA</a>
             <a href="#proyectos" className="hover:text-brand transition-colors">PROYECTOS</a>
           </div>
-          <Button onClick={() => window.location.href='#contacto'} className="px-6 py-2.5 text-sm">
+          <Button onClick={() => window.location.href='#contacto'} className="px-6 py-2.5 text-sm animate-pulse-glow">
             AVANCEMOS
           </Button>
         </div>

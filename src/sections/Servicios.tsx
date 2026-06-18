@@ -24,10 +24,10 @@ export const Servicios: React.FC = () => {
                 delay={idx * 0.05} 
                 className="flex flex-col h-full"
               >
-                <Card className="flex-1 group relative flex flex-col overflow-hidden bg-navy/40 border-white/5 hover:border-brand/50 hover:bg-navy/80 transition-all duration-500">
-                  <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none mix-blend-screen" />
+                <Card className="flex-1 group relative flex flex-col overflow-hidden bg-navy/40 border-white/5 hover:border-brand/50 hover:bg-navy/80 touch:border-brand/50 touch:bg-navy/80 transition-all duration-500">
+                  <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 touch:opacity-100 transition-opacity duration-700 pointer-events-none mix-blend-screen" />
                   
-                  <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white/5 border border-white/10 mb-8 group-hover:bg-brand group-hover:border-brand transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 group-hover:shadow-[0_0_20px_rgba(27,77,228,0.4)]">
+                  <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white/5 border border-white/10 mb-8 group-hover:bg-brand group-hover:border-brand touch:bg-brand touch:border-brand transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 group-hover:shadow-[0_0_20px_rgba(27,77,228,0.4)] touch:shadow-[0_0_20px_rgba(27,77,228,0.4)]">
                     <service.icono className="text-white w-6 h-6 transition-transform duration-500 group-hover:scale-110" />
                   </div>
                   

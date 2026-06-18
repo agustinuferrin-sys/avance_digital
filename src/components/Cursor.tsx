@@ -6,7 +6,7 @@ export const Cursor: React.FC = () => {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   
-  const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
+  const springConfig = { damping: 28, stiffness: 500, mass: 0.4 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
@@ -48,8 +48,9 @@ export const Cursor: React.FC = () => {
         y: cursorYSpring,
       }}
       animate={{
-        scale: isHovered ? 2 : 1,
-        backgroundColor: isHovered ? 'rgba(27,77,228,0.2)' : 'rgba(27,77,228,0.05)',
+        scale: isHovered ? 2.4 : 1,
+        backgroundColor: isHovered ? 'rgba(27,77,228,0.15)' : 'rgba(27,77,228,0.05)',
+        borderColor: isHovered ? 'rgba(147,197,253,0.9)' : 'rgba(27,77,228,1)',
       }}
     >
       <div className={`w-1 h-1 bg-brand rounded-full transition-all duration-300 ${isHovered ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`} />

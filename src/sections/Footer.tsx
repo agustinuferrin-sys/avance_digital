@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
           <h4 className="font-display font-bold text-white mb-6">Navegación</h4>
           <div className="flex flex-col gap-3">
             <a href="#servicios" className="text-muted hover:text-brand transition-colors">Servicios</a>
-            <a href="#sistema" className="text-muted hover:text-brand transition-colors">Sistema Avance</a>
+            <a href="#sistema" className="text-muted hover:text-brand transition-colors">Sistema Avance®</a>
             <a href="#proyectos" className="text-muted hover:text-brand transition-colors">Proyectos</a>
             <a href="#contacto" className="text-muted hover:text-brand transition-colors">Contacto</a>
           </div>
@@ -27,7 +27,7 @@ export const Footer: React.FC = () => {
           <h4 className="font-display font-bold text-white mb-6">Contacto</h4>
           <div className="flex flex-col gap-3 text-muted">
             <p>Alberti 1558, Mar del Plata</p>
-            <a href="mailto:administracion@innstudio.com.ar" className="hover:text-brand transition-colors">info@avancedigital.com.ar</a>
+            <a href="mailto:info@avancedigital.com.ar" className="hover:text-brand transition-colors">info@avancedigital.com.ar</a>
             <div className="flex gap-4 mt-2">
               <a href="https://www.instagram.com/avance_world/" target="_blank" rel="noreferrer" className="hover:text-brand transition-colors">Instagram</a>
               <a href="https://www.linkedin.com/company/agencia-de-marketing-avance/?viewAsMember=true" target="_blank" rel="noreferrer" className="hover:text-brand transition-colors">LinkedIn</a>

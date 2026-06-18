@@ -29,12 +29,12 @@ export const Hero: React.FC = () => {
           ))}
         </h1>
         <Reveal delay={0.6}>
-          <p className="text-xl md:text-2xl text-white/90 font-medium mb-12 max-w-3xl tracking-tight drop-shadow-md">
+          <p className="text-xl md:text-2xl text-white/90 font-medium mb-12 max-w-[90vw] md:max-w-none mx-auto text-center tracking-tight drop-shadow-md md:whitespace-nowrap">
             Somos más que una agencia. Somos el socio estratégico que piensa con vos.
           </p>
         </Reveal>
-        <Reveal delay={0.8}>
-          <Button onClick={() => window.location.href='#contacto'} className="text-lg md:text-xl px-12 py-6">
+        <Reveal delay={0.8} className="flex justify-center w-full">
+          <Button onClick={() => window.location.href='#contacto'} className="text-base md:text-lg px-8 py-3 min-w-[180px]">
             AVANCEMOS
           </Button>
         </Reveal>

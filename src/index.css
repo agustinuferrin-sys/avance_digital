@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant touch (@media (hover: none));
+
 @theme {
   --color-navy: #0A1A3F;
   --color-bg: #0A0A0A;
@@ -26,4 +28,16 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(27, 77, 228, 0.0); }
+  50%      { box-shadow: 0 0 22px 3px rgba(27, 77, 228, 0.55); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-glow { animation: none; }
 }
