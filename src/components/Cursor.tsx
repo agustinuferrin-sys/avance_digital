@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue } from 'framer-motion';
 
 export const Cursor: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
-  
-  const springConfig = { damping: 28, stiffness: 500, mass: 0.4 };
-  const cursorXSpring = useSpring(cursorX, springConfig);
-  const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
@@ -42,10 +38,10 @@ export const Cursor: React.FC = () => {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-8 h-8 rounded-full border border-brand bg-brand/10 pointer-events-none z-[9999] hidden lg:flex mix-blend-screen items-center justify-center transition-transform duration-300"
+      className="fixed top-0 left-0 w-8 h-8 rounded-full border border-brand bg-brand/10 pointer-events-none z-[9999] hidden lg:flex mix-blend-screen items-center justify-center transition-colors duration-300"
       style={{
-        x: cursorXSpring,
-        y: cursorYSpring,
+        x: cursorX,
+        y: cursorY,
       }}
       animate={{
         scale: isHovered ? 2.4 : 1,

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useLenis } from 'lenis/react';
+import { ArrowLeft } from 'lucide-react';
 import { getProjectBySlug } from '../data/projects';
 import { Button } from '../components/Button';
 import { Reveal } from '../components/Reveal';
@@ -9,11 +10,15 @@ import { Blob } from '../components/Blob';
 const ProyectoDetalle: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const lenis = useLenis();
   const project = slug ? getProjectBySlug(slug) : undefined;
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0 });
-  }, [slug]);
+    window.scrollTo(0, 0);
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    }
+  }, [slug, lenis]);
 
   const goToProyectos = () => {
     navigate('/');
@@ -128,8 +133,8 @@ const ProyectoDetalle: React.FC = () => {
           <div className="mt-24 rounded-card bg-gradient-to-br from-navy to-bg border border-brand/20 p-10 md:p-16 text-center shadow-[0_0_60px_rgba(27,77,228,0.1)]">
             <h2 className="font-display font-black text-3xl md:text-4xl mb-4">¿Querés un proyecto así?</h2>
             <p className="text-muted mb-10 max-w-xl mx-auto">Contanos qué tenés en mente y armamos el plan para que tu marca avance.</p>
-            <Button onClick={goToContacto} className="inline-flex items-center gap-2 px-8 py-3">
-              Avancemos <ArrowRight className="w-4 h-4" />
+            <Button onClick={goToContacto} className="px-8 py-3">
+              AVANCEMOS
             </Button>
           </div>
         </Reveal>
