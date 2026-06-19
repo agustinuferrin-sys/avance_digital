@@ -13,12 +13,13 @@ export const Clientes: React.FC = () => {
       
       <Marquee speed={50} className="mb-8">
         {clients.map(client => (
-          <img 
-            key={client.id} 
-            src={client.logo} 
-            alt={client.nombre}
-            className="h-12 object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-          />
+          <div key={client.id} className="flex items-center justify-center w-36 md:w-48 shrink-0">
+            <img
+              src={client.logo}
+              alt={client.nombre}
+              className="h-16 md:h-20 w-auto object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 touch:grayscale-0 touch:opacity-100 transition-all duration-300"
+            />
+          </div>
         ))}
       </Marquee>
     </section>
