@@ -41,8 +41,8 @@ const ProyectoDetalle: React.FC = () => {
   }
 
   return (
-    <article className="relative bg-bg overflow-hidden">
-      <Blob className="top-0 -right-40 w-[600px] h-[600px] blur-[140px] opacity-40" delay={0} />
+    <article className="relative bg-bg overflow-clip">
+      <Blob className="top-0 -right-40 w-[600px] h-[600px] opacity-40" delay={0} />
 
       <div className="max-w-6xl mx-auto px-4 md:px-6 pt-32 md:pt-40 pb-24 relative z-10">
         {/* Volver */}

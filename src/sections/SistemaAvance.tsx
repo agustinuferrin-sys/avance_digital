@@ -8,8 +8,8 @@ import { cn } from '../lib/utils';
 export const SistemaAvance: React.FC = () => {
   return (
     <section id="sistema" className="py-24 md:py-32 bg-navy relative overflow-hidden">
-      <Blob className="-right-64 top-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[100px]" delay={1} />
-      <Blob className="-left-64 top-1/4 w-[600px] h-[600px] blur-[90px] opacity-30" delay={3} />
+      <Blob className="-right-64 top-1/2 -translate-y-1/2 w-[800px] h-[800px]" delay={1} />
+      <Blob className="-left-64 top-1/4 w-[600px] h-[600px] opacity-30" delay={3} />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <Reveal>

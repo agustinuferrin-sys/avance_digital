@@ -10,7 +10,7 @@ interface BlobProps {
 export const Blob: React.FC<BlobProps> = ({ className, delay = 0 }) => {
   return (
     <motion.div
-      className={cn("absolute mix-blend-screen filter blur-[80px] opacity-60 pointer-events-none rounded-full transform-gpu will-change-transform", className)}
+      className={cn("absolute mix-blend-screen opacity-60 pointer-events-none rounded-full transform-gpu will-change-transform", className)}
       animate={{
         scale: [1, 1.2, 1],
         x: [0, 50, -50, 0],

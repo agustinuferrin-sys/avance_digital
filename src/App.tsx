@@ -15,7 +15,7 @@ import ProyectoDetalle from './sections/ProyectoDetalle';
 export default function App() {
   return (
     <ReactLenis root>
-      <div className="bg-bg text-white font-body selection:bg-brand selection:text-white min-h-screen relative overflow-hidden w-full max-w-full">
+      <div className="bg-bg text-white font-body selection:bg-brand selection:text-white min-h-screen relative overflow-clip w-full max-w-full">
         <Cursor />
         <Navbar />
         <Routes>
