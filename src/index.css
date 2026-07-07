@@ -41,3 +41,10 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-pulse-glow { animation: none; }
 }
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee var(--speed, 40s) linear infinite;
+}

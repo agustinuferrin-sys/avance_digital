@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { cn } from '../lib/utils';
 
 interface MarqueeProps {
@@ -7,28 +6,35 @@ interface MarqueeProps {
   direction?: 'left' | 'right';
   speed?: number;
   className?: string;
+  pauseOnHover?: boolean;
 }
 
 export const Marquee: React.FC<MarqueeProps> = ({ 
   children, 
   direction = 'left', 
   speed = 40,
-  className
+  className,
+  pauseOnHover = false
 }) => {
   return (
-    <div className={cn("relative flex w-full overflow-hidden whitespace-nowrap", className)}>
-      <motion.div
-        className="flex w-max items-center gap-8 pr-8"
-        animate={{ x: direction === 'left' ? ["0%", "-50%"] : ["-50%", "0%"] }}
-        transition={{
-          duration: speed,
-          ease: "linear",
-          repeat: Infinity,
-        }}
+    <div 
+      className={cn(
+        "relative flex w-full overflow-hidden whitespace-nowrap", 
+        pauseOnHover && "group",
+        className
+      )}
+      style={{ "--speed": `${speed}s` } as React.CSSProperties}
+    >
+      <div 
+        className={cn(
+          "flex w-max items-center gap-8 pr-8 animate-marquee",
+          direction === 'right' && "[animation-direction:reverse]",
+          pauseOnHover && "group-hover:[animation-play-state:paused]"
+        )}
       >
         <div className="flex shrink-0 gap-8 items-center justify-around">{children}</div>
         <div className="flex shrink-0 gap-8 items-center justify-around">{children}</div>
-      </motion.div>
+      </div>
     </div>
   );
 };
