@@ -50,6 +50,7 @@ export const Proyectos: React.FC = () => {
                 <img
                   src={project.imagen}
                   alt={project.nombre}
+                  loading="lazy"
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 touch:grayscale-0 transition-all duration-700 group-hover:scale-105"
                   loading="lazy"
                 />

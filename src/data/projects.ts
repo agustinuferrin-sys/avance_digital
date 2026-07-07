@@ -2,7 +2,6 @@ export interface ProjectMetric {
   label: string;
   value: string;
 }
-
 export interface Project {
   id: string;
   slug: string;
@@ -19,7 +18,6 @@ export interface Project {
   galeria: string[];
 }
 
-// NOTA: contenido e imágenes son placeholder. Reemplazar por casos reales.
 export const projects: Project[] = [
   {
     id: 'p1',
@@ -28,7 +26,7 @@ export const projects: Project[] = [
     categoría: 'Publicidad Paga',
     cliente: 'Cliente Demo',
     año: '2025',
-    imagen: 'https://picsum.photos/seed/p1/900/1200',
+    imagen: '/images/projects/Proyecto 1.webp',
     resumen: 'Lanzamiento de producto con foco en performance y adquisición.',
     desafio: 'Presentar un producto nuevo en un mercado saturado y conseguir tracción medible en las primeras semanas.',
     solucion: 'Estructura de campañas por etapa del funnel, creatividades testeadas en lotes y optimización diaria sobre las métricas que mueven la aguja.',
@@ -38,7 +36,7 @@ export const projects: Project[] = [
       { label: 'Alcance', value: '1.2M' },
     ],
     servicios: ['Estrategia de medios', 'Creatividades', 'Optimización'],
-    galeria: ['https://picsum.photos/seed/p1a/1200/800', 'https://picsum.photos/seed/p1b/1200/800', 'https://picsum.photos/seed/p1c/1200/800'],
+    galeria: ['/images/projects/Proyecto 1.webp'],
   },
   {
     id: 'p2',
@@ -47,7 +45,7 @@ export const projects: Project[] = [
     categoría: 'Branding',
     cliente: 'Cliente Demo',
     año: '2025',
-    imagen: 'https://picsum.photos/seed/p2/900/1200',
+    imagen: '/images/projects/Proyecto 2.webp',
     resumen: 'Reconstrucción completa de la identidad de marca.',
     desafio: 'Una marca con buen producto pero sin identidad consistente ni sistema visual aplicable.',
     solucion: 'Plataforma de marca, sistema visual modular y guía de aplicación para que el equipo produzca sin perder coherencia.',
@@ -57,7 +55,7 @@ export const projects: Project[] = [
       { label: 'Piezas', value: '40+' },
     ],
     servicios: ['Identidad visual', 'Manual de marca', 'Sistema de diseño'],
-    galeria: ['https://picsum.photos/seed/p2a/1200/800', 'https://picsum.photos/seed/p2b/1200/800', 'https://picsum.photos/seed/p2c/1200/800'],
+    galeria: ['/images/projects/Proyecto 2.webp'],
   },
   {
     id: 'p3',
@@ -66,7 +64,7 @@ export const projects: Project[] = [
     categoría: 'Producción Audiovisual',
     cliente: 'Cliente Demo',
     año: '2024',
-    imagen: 'https://picsum.photos/seed/p3/900/1200',
+    imagen: '/images/projects/Proyecto 3.webp',
     resumen: 'Cobertura audiovisual integral de un evento de marca.',
     desafio: 'Capturar un evento de un día y convertirlo en contenido para sostener semanas de comunicación.',
     solucion: 'Plan de captura multicámara, guion de piezas y edición pensada para distintos formatos y plataformas.',
@@ -76,16 +74,16 @@ export const projects: Project[] = [
       { label: 'Engagement', value: '+72%' },
     ],
     servicios: ['Dirección', 'Producción', 'Edición'],
-    galeria: ['https://picsum.photos/seed/p3a/1200/800', 'https://picsum.photos/seed/p3b/1200/800', 'https://picsum.photos/seed/p3c/1200/800'],
+    galeria: ['/images/projects/Proyecto 3.webp'],
   },
   {
-    id: 'p5',
+    id: 'p4',
     slug: 'grilla-mensual',
     nombre: 'Grilla Mensual',
     categoría: 'Social Media Management',
     cliente: 'Cliente Demo',
     año: '2025',
-    imagen: 'https://picsum.photos/seed/p5/900/1200',
+    imagen: '/images/projects/Proyecto 4.webp',
     resumen: 'Gestión integral de redes con grilla de contenido mensual.',
     desafio: 'Una cuenta sin línea editorial clara y con publicación irregular.',
     solucion: 'Línea editorial, calendario mensual y un flujo de producción y aprobación que mantiene el ritmo sin fricción.',
@@ -95,16 +93,16 @@ export const projects: Project[] = [
       { label: 'Constancia', value: 'x4' },
     ],
     servicios: ['Estrategia de contenido', 'Diseño', 'Community management'],
-    galeria: ['https://picsum.photos/seed/p5a/1200/800', 'https://picsum.photos/seed/p5b/1200/800', 'https://picsum.photos/seed/p5c/1200/800'],
+    galeria: ['/images/projects/Proyecto 4.webp'],
   },
   {
-    id: 'p6',
+    id: 'p5',
     slug: 'sesion-producto',
     nombre: 'Sesión Producto',
     categoría: 'Producción Audiovisual',
     cliente: 'Cliente Demo',
     año: '2024',
-    imagen: 'https://picsum.photos/seed/p6/900/1200',
+    imagen: '/images/projects/Proyecto 5.webp',
     resumen: 'Sesión de fotografía y video de producto.',
     desafio: 'Mostrar el producto con un nivel de terminación acorde a una marca premium.',
     solucion: 'Dirección de arte, set controlado y un banco de imágenes y clips listos para campaña y catálogo.',
@@ -114,16 +112,16 @@ export const projects: Project[] = [
       { label: 'Usos', value: 'Multi' },
     ],
     servicios: ['Dirección de arte', 'Fotografía', 'Video'],
-    galeria: ['https://picsum.photos/seed/p6a/1200/800', 'https://picsum.photos/seed/p6b/1200/800', 'https://picsum.photos/seed/p6c/1200/800'],
+    galeria: ['/images/projects/Proyecto 5.webp'],
   },
   {
-    id: 'p7',
+    id: 'p6',
     slug: 'identidad-visual',
     nombre: 'Identidad Visual',
     categoría: 'Diseño Gráfico',
     cliente: 'Cliente Demo',
     año: '2025',
-    imagen: 'https://picsum.photos/seed/p7/900/1200',
+    imagen: '/images/projects/Proyecto 6.webp',
     resumen: 'Sistema de identidad visual para una marca emergente.',
     desafio: 'Arrancar de cero una identidad que se banque crecer con la marca.',
     solucion: 'Logotipo, paleta, tipografía y un set de aplicaciones base con criterios claros de uso.',
@@ -133,16 +131,16 @@ export const projects: Project[] = [
       { label: 'Escalable', value: 'Sí' },
     ],
     servicios: ['Logotipo', 'Sistema visual', 'Aplicaciones'],
-    galeria: ['https://picsum.photos/seed/p7a/1200/800', 'https://picsum.photos/seed/p7b/1200/800', 'https://picsum.photos/seed/p7c/1200/800'],
+    galeria: ['/images/projects/Proyecto 6.webp'],
   },
   {
-    id: 'p8',
+    id: 'p7',
     slug: 'ads-conversion',
     nombre: 'Ads Conversion',
     categoría: 'Publicidad Paga',
     cliente: 'Cliente Demo',
     año: '2025',
-    imagen: 'https://picsum.photos/seed/p8/900/1200',
+    imagen: '/images/projects/Proyecto 7.webp',
     resumen: 'Campañas de conversión con foco en eficiencia.',
     desafio: 'Bajar el costo por resultado sin resignar volumen.',
     solucion: 'Reestructuración de campañas, limpieza de audiencias y un ciclo de testeo creativo sostenido.',
@@ -152,16 +150,16 @@ export const projects: Project[] = [
       { label: 'ROAS', value: '5.1x' },
     ],
     servicios: ['Performance', 'Testeo creativo', 'Analítica'],
-    galeria: ['https://picsum.photos/seed/p8a/1200/800', 'https://picsum.photos/seed/p8b/1200/800', 'https://picsum.photos/seed/p8c/1200/800'],
+    galeria: ['/images/projects/Proyecto 7.webp'],
   },
   {
-    id: 'p9',
+    id: 'p8',
     slug: 'shorts-reels',
     nombre: 'Shorts & Reels',
     categoría: 'Content Creator',
     cliente: 'Cliente Demo',
     año: '2025',
-    imagen: 'https://picsum.photos/seed/p9/900/1200',
+    imagen: '/images/projects/Proyecto 8.webp',
     resumen: 'Contenido vertical de alto volumen para redes.',
     desafio: 'Sostener un ritmo alto de contenido vertical sin que baje la calidad.',
     solucion: 'Formatos repetibles, guiones ágiles y un pipeline de edición pensado para producir en serie.',
@@ -171,7 +169,7 @@ export const projects: Project[] = [
       { label: 'Guardados', value: '+85%' },
     ],
     servicios: ['Guion', 'Producción', 'Edición vertical'],
-    galeria: ['https://picsum.photos/seed/p9a/1200/800', 'https://picsum.photos/seed/p9b/1200/800', 'https://picsum.photos/seed/p9c/1200/800'],
+    galeria: ['/images/projects/Proyecto 8.webp'],
   },
 ];
 

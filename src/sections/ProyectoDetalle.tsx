@@ -86,7 +86,7 @@ const ProyectoDetalle: React.FC = () => {
         {/* Portada */}
         <Reveal delay={0.15}>
           <div className="mt-12 rounded-card overflow-hidden aspect-[16/10] bg-navy">
-            <img src={project.imagen} alt={project.nombre} className="w-full h-full object-cover" />
+            <img src={project.imagen} loading="lazy" alt={project.nombre} className="w-full h-full object-cover" />
           </div>
         </Reveal>
 

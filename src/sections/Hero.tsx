@@ -10,8 +10,20 @@ export const Hero: React.FC = () => {
 
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden bg-bg pt-20">
-      <Blob className="top-1/4 -left-32 w-[600px] h-[600px] md:w-[800px] md:h-[800px]" delay={0} />
-      <Blob className="bottom-1/4 -right-32 w-[500px] h-[500px] md:w-[700px] md:h-[700px]" delay={2} />
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none mix-blend-screen">
+        <video 
+          src="/video/videoplayback.webm" 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      <Blob className="top-1/4 -left-32 w-[600px] h-[600px] md:w-[800px] md:h-[800px] opacity-70 z-0" delay={0} />
+      <Blob className="bottom-1/4 -right-32 w-[500px] h-[500px] md:w-[700px] md:h-[700px] opacity-70 z-0" delay={2} />
       
       <div className="flex-1 flex flex-col items-center justify-center text-center px-4 max-w-7xl mx-auto z-10 relative mt-20 md:mt-0">
         <h1 className="font-display font-black leading-[1.05] tracking-[-0.02em] mb-8 text-5xl md:text-6xl lg:text-7xl xl:text-8xl flex flex-wrap justify-center gap-x-[0.2em]">
@@ -28,11 +40,13 @@ export const Hero: React.FC = () => {
             </span>
           ))}
         </h1>
+
         <Reveal delay={0.6}>
           <p className="text-xl md:text-2xl text-white/90 font-medium mb-12 max-w-[90vw] md:max-w-none mx-auto text-center tracking-tight drop-shadow-md md:whitespace-nowrap">
             Somos más que una agencia. Somos el socio estratégico que piensa con vos.
           </p>
         </Reveal>
+
         <Reveal delay={0.8} className="flex justify-center w-full">
           <Button onClick={() => window.location.href='#contacto'} className="text-base md:text-lg px-8 py-3 min-w-[180px]">
             AVANCEMOS
