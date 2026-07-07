@@ -1,20 +1,46 @@
-import { PenTool, Share2, Megaphone, Video, Image, Globe, Film, Lightbulb } from 'lucide-react';
-import React from 'react';
+export const servicesHeader = {
+  titulo: "Servicios que trabajan en una misma dirección.",
+  bajada: "Cada marca necesita un camino distinto. Por eso activamos las áreas que tienen sentido según su etapa, objetivo y oportunidad de crecimiento.",
+  cta: "Conocé cómo podemos acompañar tu marca",
+};
 
-export interface Service {
-  id: string;
-  nombre: string;
-  descripción: string;
-  icono: React.ElementType;
-}
-
-export const services: Service[] = [
-  { id: 'branding', nombre: 'Branding', descripción: 'Construimos identidades sólidas, memorables y con propósito.', icono: PenTool },
-  { id: 'smm', nombre: 'Social Media Management', descripción: 'Gestionamos y potenciamos tu comunidad con contenido de valor.', icono: Share2 },
-  { id: 'paid', nombre: 'Publicidad Paga', descripción: 'Campañas en Meta y Google Ads orientadas a un retorno real.', icono: Megaphone },
-  { id: 'cc', nombre: 'Content Creator', descripción: 'Creadores de contenido orgánico para conectar con tu audiencia.', icono: Video },
-  { id: 'dg', nombre: 'Diseño Gráfico', descripción: 'Piezas visuales de alto impacto alineadas a tu marca.', icono: Image },
-  { id: 'web', nombre: 'Sitio Web', descripción: 'Desarrollo web moderno, rápido y optimizado para la conversión.', icono: Globe },
-  { id: 'audiovisual', nombre: 'Producción Audiovisual', descripción: 'Dirección, grabación y edición de foto y video profesional.', icono: Film },
-  { id: 'asesorias', nombre: 'Asesorías', descripción: 'Consultoría estratégica 1:1 para destrabar tu crecimiento.', icono: Lightbulb },
+export const services = [
+  { num: "01", titulo: "Estrategia & Consultoría", destacado: true,
+    bajada: "Claridad, diagnóstico y dirección para marcas que necesitan ordenar decisiones antes de ejecutar.",
+    items: ["Diagnóstico de marca","Auditoría de comunicación","Definición de objetivos","Plan de acción","Acompañamiento estratégico"],
+    microfrase: "Antes de hacer más, entendemos qué hay que hacer." },
+  { num: "02", titulo: "Identidad & Posicionamiento",
+    bajada: "Construimos marcas más claras, reconocibles y alineadas con el lugar que quieren ocupar.",
+    items: ["Identidad de marca","Branding","Posicionamiento","Mensaje de marca","Sistema visual"],
+    microfrase: "Que tu marca deje de parecer una más." },
+  { num: "03", titulo: "Comunicación & Social Media",
+    bajada: "Gestión estratégica de la presencia digital para comunicar con intención y sostener posicionamiento.",
+    items: ["Manejo de redes","Planificación de contenido","Calendario estratégico","Community management","Reportes y optimización"],
+    microfrase: "No se trata de publicar. Se trata de comunicar con dirección." },
+  { num: "04", titulo: "Contenido & Producción",
+    bajada: "Creamos recursos visuales para mostrar tu marca con la calidad, confianza y percepción que merece.",
+    items: ["Producción fotográfica","Producción audiovisual","Studio AVANCE®","UGC estratégico","Marketing de influencers","Contenido institucional"],
+    microfrase: "Mostrar mejor también es posicionar mejor." },
+  { num: "05", titulo: "Diseño & Recursos de Marca",
+    bajada: "Diseñamos piezas y materiales para que tu marca sea coherente en cada punto de contacto.",
+    items: ["Diseño gráfico","Presentaciones comerciales","Papelería institucional","Merchandising","Catálogos y brochures","Piezas para eventos"],
+    microfrase: "Que todo lo que vea tu cliente hable el mismo idioma." },
+  { num: "06", titulo: "Paid Media & Performance",
+    bajada: "Publicidad digital pensada para llegar a las personas correctas y generar oportunidades reales.",
+    items: ["Meta Ads","Google Ads","Campañas de conversión","Remarketing","Generación de leads","Análisis de resultados"],
+    microfrase: "No es invertir más. Es invertir con dirección." },
+  { num: "07", titulo: "Digital Experience & Web",
+    bajada: "Creamos experiencias digitales claras, profesionales y pensadas para convertir interés en acción.",
+    items: ["Sitios web","Landing pages","Estructura de contenido","UX / experiencia de usuario","Optimización de conversión","Integración con campañas"],
+    microfrase: "Tu sitio no debería ser solo una vidriera." },
+  { num: "08", titulo: "Activaciones & Experiencias",
+    bajada: "Llevamos la marca a experiencias reales para conectar con las personas más allá de la pantalla.",
+    items: ["Activaciones de marca","Eventos","Lanzamientos","Material POP","Acciones con creadores","Experiencias presenciales"],
+    microfrase: "La marca también se construye en el mundo real." },
 ];
+
+export const servicesCierre = {
+  titulo: "No son servicios aislados.\nSon áreas que se conectan.",
+  bajada: "El valor de AVANCE® está en entender qué necesita cada marca y activar las herramientas correctas para que todo trabaje con una misma dirección.",
+  cta: "Hablemos de tu marca",
+};

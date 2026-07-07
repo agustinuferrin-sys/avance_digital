@@ -8,6 +8,7 @@ import { Proyectos } from './sections/Proyectos';
 import { Planes } from './sections/Planes';
 import { EsParaVos } from './sections/EsParaVos';
 import { Clientes } from './sections/Clientes';
+import { FAQ } from './sections/FAQ';
 import { Contacto } from './sections/Contacto';
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
       <Planes />
       <EsParaVos />
       <Clientes />
+      <FAQ />
       <Contacto />
     </>
   );
