@@ -1,55 +1,57 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { SectionHeading } from '../components/SectionHeading';
 import { Reveal } from '../components/Reveal';
 import { methodSteps } from '../data/methodSteps';
 import { Blob } from '../components/Blob';
-import { cn } from '../lib/utils';
+import { Marquee } from '../components/Marquee';
 
 export const SistemaAvance: React.FC = () => {
   return (
-    <section id="sistema" className="py-24 md:py-32 bg-navy relative overflow-hidden">
+    <section id="sistema" className="py-24 md:py-32 bg-navy relative overflow-hidden flex flex-col">
       <Blob className="-right-64 top-1/2 -translate-y-1/2 w-[800px] h-[800px]" delay={1} />
       <Blob className="-left-64 top-1/4 w-[600px] h-[600px] opacity-30" delay={3} />
       
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full mb-16 md:mb-24">
         <Reveal>
-          <SectionHeading subtitle="MÉTODO" className="mb-20">
+          <SectionHeading subtitle="MÉTODO" className="mb-12 md:mb-20">
             SISTEMA AVANCE<span className="text-brand">®</span>
           </SectionHeading>
         </Reveal>
 
-        <div className="space-y-24 md:space-y-32">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6 relative">
+          {/* Línea conectora base global para desktop, detrás de todo */}
+          <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-[1px] bg-brand/20 z-0" />
+
           {methodSteps.map((step, idx) => (
-            <div key={step.número} className="relative flex flex-col md:flex-row items-center gap-12 md:gap-24 group">
-              {/* Background giant number */}
-              <div className={cn(
-                "absolute top-1/2 -translate-y-1/2 font-display font-black text-[clamp(8rem,20vw,18rem)] leading-none text-white/[0.05] -z-10 pointer-events-none select-none transform-gpu transition-transform duration-700 group-hover:scale-105 group-hover:text-brand/[0.08]",
-                idx % 2 === 1 ? "md:right-0 md:left-auto left-0" : "left-0"
-              )}>
-                {step.número}
+            <motion.div 
+              key={step.número}
+              initial={{ opacity: 0, x: -20, y: 20 }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: idx * 0.2, type: "spring", stiffness: 100 }}
+              className="group flex flex-col cursor-default z-10"
+            >
+              <div className="w-full h-full flex flex-col bg-bg/50 md:bg-navy/80 backdrop-blur-sm border border-white/5 rounded-card p-6 md:p-8 transition-all duration-300 hover:border-brand/50 hover:bg-navy hover:-translate-y-2 hover:shadow-[0_8px_30px_-12px_rgba(27,77,228,0.5)] touch:border-brand/50 touch:bg-navy touch:shadow-[0_8px_30px_-12px_rgba(27,77,228,0.5)]">
+                <span className="block font-display font-black text-5xl md:text-6xl text-brand/20 group-hover:text-brand touch:text-brand transition-colors duration-300 mb-4">
+                  {step.número}
+                </span>
+                <h3 className="font-display font-bold text-xl md:text-2xl text-white mb-3">
+                  {step.título}
+                </h3>
+                <p className="text-sm text-muted font-body leading-relaxed group-hover:text-white/90 touch:text-white/90 transition-colors duration-300 mt-auto">
+                  {step.descripción}
+                </p>
               </div>
-              
-              {/* Content staggered alignment */}
-              <div className={`w-full md:w-1/2 ${idx % 2 === 1 ? 'md:ml-auto' : ''}`}>
-                <Reveal delay={0.1}>
-                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand/10 text-brand font-display font-bold text-2xl mb-8 backdrop-blur-md border border-brand/20 group-hover:bg-brand group-hover:text-white touch:bg-brand touch:text-white touch:border-brand transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(27,77,228,0.3)] touch:shadow-[0_0_30px_rgba(27,77,228,0.3)]">
-                      {step.número}
-                   </div>
-                </Reveal>
-                <Reveal delay={0.2}>
-                  <h3 className="font-display font-black text-3xl md:text-5xl mb-6 text-white tracking-tight">
-                    {step.título}
-                  </h3>
-                </Reveal>
-                <Reveal delay={0.3}>
-                  <p className="text-lg md:text-xl text-white/70 font-light leading-relaxed max-w-lg">
-                    {step.descripción}
-                  </p>
-                </Reveal>
-              </div>
-            </div>
+            </motion.div>
           ))}
         </div>
+      </div>
+
+      <div className="relative z-10 bg-black/20 py-6 border-y border-white/5 w-full mt-auto">
+        <Marquee speed={40} className="font-display font-black text-2xl md:text-3xl text-white/20 tracking-widest uppercase">
+          SOCIAL MEDIA MANAGEMENT &middot; BRANDING &middot; PAID MEDIA &middot; CONTENT CREATOR &middot; UGC / INFLUENCERS &middot; ACTIVACIONES &middot; DISEÑO GRÁFICO &middot; SITIO WEB &middot; CONSULTORÍA &middot;&nbsp;
+        </Marquee>
       </div>
     </section>
   );

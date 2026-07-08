@@ -7,22 +7,27 @@ export interface MethodStep {
 export const methodSteps: MethodStep[] = [
   {
     número: '01',
-    título: 'Estrategia',
-    descripción: 'Investigamos tu mercado, competencia y audiencia para trazar un norte claro.',
+    título: 'Entender',
+    descripción: 'Analizamos tu marca, tu mercado y tu punto de partida.',
   },
   {
     número: '02',
-    título: 'Planificación',
-    descripción: 'Diseñamos el road map de contenidos, campañas y acciones clave.',
+    título: 'Ordenar',
+    descripción: 'Definimos prioridades, mensaje, posicionamiento y dirección.',
   },
   {
     número: '03',
-    título: 'Ejecución',
-    descripción: 'Implementamos con nuestra producción gráfica, audiovisual y publicitaria.',
+    título: 'Ejecutar',
+    descripción: 'Convertimos la estrategia en acciones concretas: contenido, diseño, campañas, comunicación y publicidad.',
   },
   {
     número: '04',
-    título: 'Optimización',
-    descripción: 'Medimos cada métrica, iteramos y escalamos lo que verdaderamente funciona.',
+    título: 'Medir',
+    descripción: 'Leemos datos, resultados y señales para tomar decisiones con criterio.',
   },
+  {
+    número: '05',
+    título: 'Escalar',
+    descripción: 'Optimizamos lo que funciona y acompañamos el crecimiento de forma sostenible.',
+  }
 ];

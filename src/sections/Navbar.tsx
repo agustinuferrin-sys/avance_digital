@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Button } from '../components/Button';
 
 export const Navbar: React.FC = () => {
@@ -30,6 +30,7 @@ export const Navbar: React.FC = () => {
     { id: 'sistema', label: 'SISTEMA AVANCE®' },
     { id: 'estrategia', label: 'ESTRATEGIA' },
     { id: 'proyectos', label: 'PROYECTOS' },
+    { id: 'es-para-vos', label: 'ABOUT' },
   ];
 
   return (
@@ -41,12 +42,15 @@ export const Navbar: React.FC = () => {
 
         {/* Desktop */}
         <div className="hidden lg:flex items-center gap-8">
-          <div className="flex gap-6 text-sm font-medium">
+          <div className="flex gap-6 text-sm font-medium items-center">
             {links.map(l => (
-              <button key={l.id} onClick={() => go(l.id)} className="hover:text-brand transition-colors">
+              <button key={l.id} onClick={() => go(l.id)} className="hover:text-brand transition-colors whitespace-nowrap">
                 {l.label}
               </button>
             ))}
+            <Link to="/plantillas" onClick={() => window.scrollTo(0, 0)} className="text-brand font-medium hover:text-white transition-colors border border-brand/50 rounded-pill px-4 py-1.5 hover:bg-brand/20 whitespace-nowrap">
+              PLANTILLAS EDITABLES
+            </Link>
           </div>
           <Button onClick={() => go('contacto')} className="px-6 py-2.5 text-sm animate-pulse-glow">
             AVANCEMOS
@@ -61,12 +65,15 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="lg:hidden absolute top-20 left-0 right-0 bg-navy h-screen p-6 flex flex-col gap-6">
+        <div className="lg:hidden absolute top-20 left-0 right-0 bg-navy min-h-screen p-6 flex flex-col gap-6 overflow-y-auto pb-32">
           {links.map(l => (
             <button key={l.id} onClick={() => go(l.id)} className="text-2xl font-display font-bold text-left">
               {l.label}
             </button>
           ))}
+          <Link to="/plantillas" onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }} className="text-2xl font-display font-bold text-left text-brand">
+            PLANTILLAS EDITABLES
+          </Link>
           <button onClick={() => go('contacto')} className="text-2xl font-display font-bold text-brand mt-4 text-left">
             AVANCEMOS
           </button>

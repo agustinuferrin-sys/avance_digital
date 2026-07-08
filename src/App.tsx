@@ -11,6 +11,7 @@ import { Cursor } from './components/Cursor';
 import { MessageCircle } from 'lucide-react';
 import Home from './Home';
 import ProyectoDetalle from './sections/ProyectoDetalle';
+import Plantillas from './pages/Plantillas';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/proyectos/:slug" element={<ProyectoDetalle />} />
+          <Route path="/plantillas" element={<Plantillas />} />
         </Routes>
         <Footer />
       </div>

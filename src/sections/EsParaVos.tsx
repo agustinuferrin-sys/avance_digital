@@ -4,7 +4,7 @@ import { Check } from 'lucide-react';
 
 export const EsParaVos: React.FC = () => {
   return (
-    <section className="py-24 md:py-32 bg-navy relative border-t border-white/5">
+    <section id="es-para-vos" className="py-24 md:py-32 bg-navy relative border-t border-white/5">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-brand/[0.05] via-transparent to-transparent pointer-events-none" />
       <div className="max-w-5xl mx-auto px-6 relative z-10">
         <Reveal>
