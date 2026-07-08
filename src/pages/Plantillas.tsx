@@ -3,7 +3,6 @@ import { useLenis } from 'lenis/react';
 import { Button } from '../components/Button';
 import { Reveal } from '../components/Reveal';
 import { CheckCircle2 } from 'lucide-react';
-import { Blob } from '../components/Blob';
 
 const LEADS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz97FF1FD88t6iQckGzBCb6jk1GA0VXySURGvjoytQpdtfm7qaytsOalX6K3Xfhv9Cs3A/exec';
 
@@ -44,9 +43,8 @@ export default function Plantillas() {
   };
 
   return (
-    <main className="flex-grow flex items-center justify-center pt-20 relative z-10 min-h-screen">
-      <Blob className="-right-64 top-1/4 -translate-y-1/2 w-[800px] h-[800px]" delay={1} />
-      <Blob className="-left-64 bottom-0 w-[600px] h-[600px] opacity-30" delay={3} />
+    <main className="flex-grow flex items-center justify-center pt-20 relative z-10 min-h-screen bg-navy overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand/[0.04] via-transparent to-transparent pointer-events-none" />
       
       <section className="py-24 md:py-32 w-full">
         <div className="max-w-3xl mx-auto px-6 text-center">

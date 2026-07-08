@@ -3,14 +3,12 @@ import { motion } from 'framer-motion';
 import { SectionHeading } from '../components/SectionHeading';
 import { Reveal } from '../components/Reveal';
 import { methodSteps } from '../data/methodSteps';
-import { Blob } from '../components/Blob';
 import { Marquee } from '../components/Marquee';
 
 export const SistemaAvance: React.FC = () => {
   return (
     <section id="sistema" className="py-24 md:py-32 bg-navy relative overflow-hidden flex flex-col">
-      <Blob className="-right-64 top-1/2 -translate-y-1/2 w-[800px] h-[800px]" delay={1} />
-      <Blob className="-left-64 top-1/4 w-[600px] h-[600px] opacity-30" delay={3} />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand/[0.04] via-transparent to-transparent pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full mb-16 md:mb-24">
         <Reveal>
@@ -50,7 +48,7 @@ export const SistemaAvance: React.FC = () => {
 
       <div className="relative z-10 bg-black/20 py-6 border-y border-white/5 w-full mt-auto">
         <Marquee speed={40} className="font-display font-black text-2xl md:text-3xl text-white/20 tracking-widest uppercase">
-          SOCIAL MEDIA MANAGEMENT &middot; BRANDING &middot; PAID MEDIA &middot; CONTENT CREATOR &middot; UGC / INFLUENCERS &middot; ACTIVACIONES &middot; DISEÑO GRÁFICO &middot; SITIO WEB &middot; CONSULTORÍA &middot;&nbsp;
+          SOCIAL MEDIA MANAGEMENT › BRANDING › PAID MEDIA › CONTENT CREATOR › UGC/INFLUENCERS › ACTIVACIONES › DISEÑO GRÁFICO › SITIO WEB › CONSULTORÍA ›&nbsp;
         </Marquee>
       </div>
     </section>
