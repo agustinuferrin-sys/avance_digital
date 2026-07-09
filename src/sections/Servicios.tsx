@@ -17,23 +17,23 @@ export const Servicios: React.FC = () => {
   const regulares = services.filter(s => !s.destacado);
 
   return (
-    <section id="servicios" className="py-24 md:py-32 bg-bg relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand/[0.03] via-transparent to-transparent pointer-events-none" />
+    <section id="servicios" className="py-24 md:py-32 bg-mist relative">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand/[0.06] via-transparent to-transparent pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
         {/* Header */}
         <Reveal>
           <div className="mb-16 md:mb-24 md:w-3/4 lg:w-2/3">
-            <h2 className="font-display font-black text-4xl md:text-5xl lg:text-6xl tracking-tight mb-6 leading-[1.1]">
+            <h2 className="font-display font-black text-4xl md:text-5xl lg:text-6xl tracking-tight mb-6 leading-[1.1] text-ink">
               {servicesHeader.titulo}
             </h2>
-            <p className="text-muted font-light text-lg md:text-xl leading-relaxed mb-8">
+            <p className="text-ink/60 font-light text-lg md:text-xl leading-relaxed mb-8">
               {servicesHeader.bajada}
             </p>
             <button 
               onClick={scrollToContacto}
-              className="group inline-flex items-center gap-2 text-brand font-semibold hover:text-white transition-colors"
+              className="group inline-flex items-center gap-2 text-brand font-semibold hover:text-brandAlt transition-colors"
             >
               {servicesHeader.cta}
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -125,10 +125,10 @@ export const Servicios: React.FC = () => {
 
         {/* Cierre */}
         <Reveal delay={0.2} className="mt-24 text-center max-w-3xl mx-auto flex flex-col items-center">
-          <h3 className="font-display font-black text-3xl md:text-4xl lg:text-5xl mb-6 whitespace-pre-line leading-[1.1]">
+          <h3 className="font-display font-black text-3xl md:text-4xl lg:text-5xl mb-6 whitespace-pre-line leading-[1.1] text-ink">
             {servicesCierre.titulo}
           </h3>
-          <p className="text-muted text-lg font-light leading-relaxed mb-10">
+          <p className="text-ink/60 text-lg font-light leading-relaxed mb-10">
             {servicesCierre.bajada}
           </p>
           <Button onClick={scrollToContacto}>
