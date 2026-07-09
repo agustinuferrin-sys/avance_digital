@@ -15,9 +15,7 @@ export const Contacto: React.FC = () => {
   const [formData, setFormData] = useState({ nombre: '', email: '', telefono: '', mensaje: '' });
   const [status, setStatus] = useState<Status>('idle');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     // Fallback: sin endpoint configurado, mantenemos el flujo a WhatsApp.
     if (!LEADS_ENDPOINT) {
       const message = `Hola! Soy ${formData.nombre}. Mi email: ${formData.email}. Mensaje: ${formData.mensaje}`;
@@ -87,7 +85,7 @@ export const Contacto: React.FC = () => {
                 <p className="text-muted font-light max-w-sm">Recibimos tus datos y te vamos a contactar a la brevedad para coordinar una reunión.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-6 relative z-10">
+              <div className="flex flex-col gap-5 md:gap-6 relative z-10">
                 <div>
                   <label htmlFor="nombre" className="block text-[10px] md:text-xs font-bold tracking-widest uppercase text-muted mb-2 md:mb-3">Nombre completo</label>
                   <input
@@ -125,10 +123,10 @@ export const Contacto: React.FC = () => {
                 {status === 'error' && (
                   <p className="text-sm text-red-400">Hubo un problema al enviar. Probá de nuevo o escribinos por WhatsApp.</p>
                 )}
-                <Button type="submit" disabled={status === 'sending'} className="w-full mt-2 md:mt-4 py-4 md:py-5 text-base md:text-lg font-bold shadow-[0_0_30px_rgba(27,77,228,0.2)] hover:shadow-[0_0_40px_rgba(27,77,228,0.4)] disabled:opacity-60">
+                <Button type="button" onClick={handleSubmit} disabled={status === 'sending'} className="w-full mt-2 md:mt-4 py-4 md:py-5 text-base md:text-lg font-bold shadow-[0_0_30px_rgba(27,77,228,0.2)] hover:shadow-[0_0_40px_rgba(27,77,228,0.4)] disabled:opacity-60">
                   {status === 'sending' ? 'Enviando...' : 'Enviar mensaje'}
                 </Button>
-              </form>
+              </div>
             )}
           </div>
         </Reveal>
