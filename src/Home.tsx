@@ -1,5 +1,6 @@
 import { Hero } from './sections/Hero';
 import { Filosofia } from './sections/Filosofia';
+import { Iceberg } from './sections/Iceberg';
 import { Servicios } from './sections/Servicios';
 import { Metricas } from './sections/Metricas';
 import { SistemaAvance } from './sections/SistemaAvance';
@@ -15,6 +16,7 @@ export default function Home() {
     <>
       <Hero />
       <Filosofia />
+      <Iceberg />
       <Servicios />
       <Metricas />
       <SistemaAvance />
