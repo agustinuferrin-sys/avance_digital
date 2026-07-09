@@ -20,7 +20,7 @@ export const FAQ: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="py-24 md:py-32 bg-bg relative">
+    <section id="faq" className="py-24 md:py-32 bg-mist relative">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
           
@@ -28,7 +28,7 @@ export const FAQ: React.FC = () => {
           <div className="lg:col-span-5 lg:sticky lg:top-32">
             <Reveal>
               <div className="text-brand text-xs font-bold tracking-widest uppercase mb-4">FAQ</div>
-              <h2 className="font-display font-black text-4xl md:text-5xl lg:text-6xl mb-12 tracking-tight">
+              <h2 className="font-display font-black text-4xl md:text-5xl lg:text-6xl mb-12 tracking-tight text-ink">
                 Preguntas frecuentes
               </h2>
               
@@ -53,21 +53,21 @@ export const FAQ: React.FC = () => {
               {faqs.map((faq, idx) => (
                 <div 
                   key={idx} 
-                  className="border-b border-white/10 last:border-0"
+                  className="border-b border-ink/10 last:border-0"
                 >
                   <button
                     onClick={() => toggleOpen(idx)}
                     className="w-full py-6 md:py-8 flex items-center justify-between text-left group gap-6 focus:outline-none"
                     aria-expanded={openIndex === idx}
                   >
-                    <h3 className="font-display font-medium text-lg md:text-xl text-white group-hover:text-brand touch:text-brand transition-colors duration-300">
+                    <h3 className="font-display font-medium text-lg md:text-xl text-ink group-hover:text-brand touch:text-brand transition-colors duration-300">
                       {faq.q}
                     </h3>
                     <div 
                       className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 shrink-0 ${
                         openIndex === idx 
                           ? 'border-brand bg-brand/10 text-brand' 
-                          : 'border-white/10 text-white group-hover:border-brand group-hover:text-brand touch:border-brand touch:text-brand'
+                          : 'border-ink/15 text-ink group-hover:border-brand group-hover:text-brand touch:border-brand touch:text-brand'
                       }`}
                     >
                       <Plus 
@@ -84,7 +84,7 @@ export const FAQ: React.FC = () => {
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                         className="overflow-hidden"
                       >
-                        <p className="text-muted font-light leading-relaxed pb-8 md:pr-12 text-base md:text-lg">
+                        <p className="text-ink/60 font-light leading-relaxed pb-8 md:pr-12 text-base md:text-lg">
                           {faq.a}
                         </p>
                       </motion.div>
