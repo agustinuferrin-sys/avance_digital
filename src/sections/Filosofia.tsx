@@ -6,19 +6,19 @@ export const Filosofia: React.FC = () => {
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden bg-bg">
       {/* Background Video */}
-      <div className="absolute inset-0 z-0 opacity-70 pointer-events-none">
-        <video 
-          src="/video/videoplayback.webm" 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
+      <div className="absolute inset-0 z-0 opacity-95 pointer-events-none">
+        <video
+          src="/video/videoplayback.webm"
+          autoPlay
+          loop
+          muted
+          playsInline
           className="w-full h-full object-cover"
         />
       </div>
 
-      {/* Overlays for text readability */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-bg/80 via-bg/20 to-bg/80 pointer-events-none" />
+      {/* Vignette oscuro, solo detrás del texto, para mantener la legibilidad */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_65%_70%_at_50%_50%,_rgba(0,0,0,0.65)_0%,_rgba(0,0,0,0.25)_45%,_transparent_78%)] pointer-events-none" />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto z-10 relative py-20">

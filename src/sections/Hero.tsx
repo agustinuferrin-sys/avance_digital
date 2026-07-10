@@ -10,16 +10,19 @@ export const Hero: React.FC = () => {
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden bg-bg pt-20">
       {/* Background Video */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none mix-blend-screen">
-        <video 
-          src="/video/videoplayback.webm" 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
+      <div className="absolute inset-0 z-0 opacity-85 pointer-events-none">
+        <video
+          src="/video/videoplayback.webm"
+          autoPlay
+          loop
+          muted
+          playsInline
           className="w-full h-full object-cover"
         />
       </div>
+
+      {/* Vignette oscuro, solo detrás del texto, para mantener la legibilidad del titular */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_45%,_rgba(0,0,0,0.6)_0%,_rgba(0,0,0,0.2)_45%,_transparent_75%)] pointer-events-none" />
 
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand/[0.05] via-transparent to-transparent pointer-events-none" />
       

@@ -1,53 +1,139 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { SectionHeading } from '../components/SectionHeading';
 import { Reveal } from '../components/Reveal';
-import { methodSteps } from '../data/methodSteps';
+import { methodSteps, MethodStep } from '../data/methodSteps';
 import { Marquee } from '../components/Marquee';
+import { cn } from '../lib/utils';
+
+interface PillCardProps {
+  step: MethodStep;
+  solid: boolean;
+  className?: string;
+}
+
+const PillCard: React.FC<PillCardProps> = ({ step, solid, className }) => (
+  <div
+    className={cn(
+      'relative flex flex-col justify-center min-h-[190px] md:min-h-[220px] rounded-pill px-8 py-8 md:px-10 md:py-10 transition-all duration-300 hover:brightness-110',
+      solid ? 'bg-brand text-white' : 'bg-navy border border-brand/40 text-white',
+      className
+    )}
+  >
+    <span className={cn('font-display font-black text-4xl md:text-5xl mb-3', solid ? 'text-white/30' : 'text-brand/40')}>
+      {step.número}
+    </span>
+    <h3 className="font-display font-bold text-xl md:text-2xl mb-2">{step.título}</h3>
+    <p className={cn('text-sm md:text-base font-body leading-relaxed', solid ? 'text-white/85' : 'text-muted')}>
+      {step.descripción}
+    </p>
+  </div>
+);
+
+interface GooRowProps {
+  pills: { step: MethodStep; solid: boolean }[];
+  colTemplate: string;
+  delay?: number;
+}
+
+const GooRow: React.FC<GooRowProps> = ({ pills, colTemplate, delay = 0 }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-100px' }}
+    transition={{ duration: 0.6, delay }}
+    className="relative"
+  >
+    {/* capa gooey (metaball): fusiona los fondos, sin texto, solo desktop */}
+    <div
+      className={cn('absolute inset-0 hidden md:grid gap-3 md:gap-4 [filter:url(#avance-goo)]', colTemplate)}
+      aria-hidden="true"
+    >
+      {pills.map(({ step, solid }) => (
+        <div key={step.número} className={cn('h-full rounded-pill', solid ? 'bg-brand' : 'bg-navy')} />
+      ))}
+    </div>
+
+    {/* capa de contenido, siempre nítida */}
+    <div className={cn('relative grid grid-cols-1 gap-3 md:gap-4', colTemplate)}>
+      {pills.map(({ step, solid }) => (
+        <PillCard key={step.número} step={step} solid={solid} />
+      ))}
+    </div>
+  </motion.div>
+);
 
 export const SistemaAvance: React.FC = () => {
+  const [entender, ordenar, ejecutar, medir, escalar] = methodSteps;
+
   return (
     <section id="sistema" className="py-24 md:py-32 bg-navy relative overflow-hidden flex flex-col">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand/[0.04] via-transparent to-transparent pointer-events-none" />
-      
+
+      {/* Filtro SVG gooey, invisible, usado para fusionar las pills */}
+      <svg className="absolute w-0 h-0" aria-hidden="true" focusable="false">
+        <defs>
+          <filter id="avance-goo" colorInterpolationFilters="sRGB">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+        </defs>
+      </svg>
+
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full mb-16 md:mb-24">
         <Reveal>
-          <SectionHeading subtitle="MÉTODO" className="mb-12 md:mb-20">
+          <span className="block text-brand font-semibold tracking-[0.2em] uppercase text-xs md:text-sm mb-4">
+            MÉTODO
+          </span>
+          <h2 className="font-display font-black text-3xl md:text-5xl lg:text-6xl leading-[1.1] tracking-tight bg-gradient-to-br from-muted via-white to-ink bg-clip-text text-transparent">
             SISTEMA AVANCE<span className="text-brand">®</span>
-          </SectionHeading>
+          </h2>
+
+          <div className="mt-8 md:mt-10 max-w-2xl">
+            <p className="font-display font-bold text-lg md:text-xl text-brand">No aplicamos fórmulas.</p>
+            <p className="font-body text-base md:text-lg text-white/80 mt-1">
+              Analizamos, ordenamos y construimos el camino que cada marca necesita para avanzar.
+            </p>
+          </div>
+          <div className="mt-8 md:mt-10 h-px w-full bg-white/10" />
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6 relative">
-          {/* Línea conectora base global para desktop, detrás de todo */}
-          <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-[1px] bg-brand/20 z-0" />
+        {/* Cascada de pills */}
+        <div className="mt-12 md:mt-16 flex flex-col gap-3 md:gap-4">
+          {/* Fila 1: Entender, sola */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
+          >
+            <PillCard step={entender} solid />
+          </motion.div>
 
-          {methodSteps.map((step, idx) => (
-            <motion.div 
-              key={step.número}
-              initial={{ opacity: 0, x: -20, y: 20 }}
-              whileInView={{ opacity: 1, x: 0, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: idx * 0.2, type: "spring", stiffness: 100 }}
-              className="group flex flex-col cursor-default z-10"
-            >
-              <div className="w-full h-full flex flex-col bg-bg/50 md:bg-navy/80 backdrop-blur-sm border border-white/5 rounded-card p-6 md:p-8 transition-all duration-300 hover:border-brand/50 hover:bg-navy hover:-translate-y-2 hover:shadow-[0_8px_30px_-12px_rgba(27,77,228,0.5)] touch:border-brand/50 touch:bg-navy touch:shadow-[0_8px_30px_-12px_rgba(27,77,228,0.5)]">
-                <span className="block font-display font-black text-5xl md:text-6xl text-brand/20 group-hover:text-brand touch:text-brand transition-colors duration-300 mb-4">
-                  {step.número}
-                </span>
-                <h3 className="font-display font-bold text-xl md:text-2xl text-white mb-3">
-                  {step.título}
-                </h3>
-                <p className="text-sm text-muted font-body leading-relaxed group-hover:text-white/90 touch:text-white/90 transition-colors duration-300 mt-auto">
-                  {step.descripción}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+          {/* Fila 2: Ordenar + Ejecutar (Ejecutar más ancha) */}
+          <GooRow
+            pills={[
+              { step: ordenar, solid: false },
+              { step: ejecutar, solid: true },
+            ]}
+            colTemplate="md:grid-cols-[0.8fr_1.2fr]"
+            delay={0.1}
+          />
+
+          {/* Fila 3: Medir + Escalar */}
+          <GooRow
+            pills={[
+              { step: medir, solid: false },
+              { step: escalar, solid: true },
+            ]}
+            colTemplate="md:grid-cols-[1fr_1.05fr]"
+            delay={0.2}
+          />
         </div>
       </div>
 
-      <div className="relative z-10 bg-black/20 py-6 border-y border-white/5 w-full mt-auto">
-        <Marquee speed={40} className="font-display font-black text-2xl md:text-3xl text-white/20 tracking-widest uppercase">
+      <div className="relative z-10 bg-brand py-6 md:py-8 w-full mt-auto">
+        <Marquee speed={40} className="font-display font-black text-xl md:text-3xl text-white tracking-widest uppercase">
           SOCIAL MEDIA MANAGEMENT › BRANDING › PAID MEDIA › CONTENT CREATOR › UGC/INFLUENCERS › ACTIVACIONES › DISEÑO GRÁFICO › SITIO WEB › CONSULTORÍA ›&nbsp;
         </Marquee>
       </div>
