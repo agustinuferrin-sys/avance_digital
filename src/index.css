@@ -13,6 +13,8 @@
   --color-muted: #A0AEC0;
   --color-mist: #DFE0E8;
   --color-ink: #0A0A0A;
+  --color-chromeLight: #E8E8E8;
+  --color-chromeDark: #4A4A4A;
 
   --font-display: "Poppins", sans-serif;
   --font-body: "Poppins", sans-serif;
@@ -49,4 +51,37 @@
 }
 .animate-marquee {
   animation: marquee var(--speed, 40s) linear infinite;
+}
+
+@keyframes button-shine {
+  0% { left: -100px; }
+  60% { left: 100%; }
+  to { left: 100%; }
+}
+
+.shine-btn {
+  position: relative;
+  overflow: hidden;
+}
+.shine-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100px;
+  width: 100px;
+  height: 100%;
+  background-image: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0) 70%
+  );
+  opacity: 0.6;
+  pointer-events: none;
+}
+.shine-btn:hover::before {
+  animation: button-shine 1.5s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shine-btn:hover::before { animation: none; }
 }

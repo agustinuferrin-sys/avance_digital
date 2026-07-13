@@ -15,9 +15,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           "group relative inline-flex items-center justify-center gap-2",
           "rounded-pill px-8 py-4 font-body font-semibold text-white",
-          "bg-brand transition-all duration-300 ease-out",
-          "hover:bg-brandAlt hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(27,77,228,0.4)]",
-          "active:scale-95",
+          "bg-brand transition-all duration-300 ease-out border border-white/30",
+          "hover:bg-brandAlt hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(27,77,228,0.4)] hover:border-white/60",
+          "active:scale-95 shine-btn",
           className
         )}
         {...props}

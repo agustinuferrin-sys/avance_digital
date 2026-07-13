@@ -1,33 +1,80 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, ArrowRight } from 'lucide-react';
 import { SectionHeading } from '../components/SectionHeading';
 import { Reveal } from '../components/Reveal';
 import { projects } from '../data/projects';
-import { cn } from '../lib/utils';
+
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 export const Proyectos: React.FC = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
-  const [isEnd, setIsEnd] = useState(false);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const animationRef = useRef<number | null>(null);
 
-  const checkScroll = () => {
-    if (carouselRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-      setIsEnd(scrollLeft + clientWidth >= scrollWidth - 10);
-    }
+  // índice de la card actualmente "encajada" contra el borde izquierdo del carrusel
+  const getClosestIndex = (): number => {
+    const container = carouselRef.current;
+    if (!container) return 0;
+    const containerRect = container.getBoundingClientRect();
+    const paddingLeft = parseFloat(getComputedStyle(container).paddingLeft) || 0;
+    const targetX = containerRect.left + paddingLeft;
+
+    let closest = 0;
+    let minDist = Infinity;
+    itemRefs.current.forEach((item, i) => {
+      if (!item) return;
+      const dist = Math.abs(item.getBoundingClientRect().left - targetX);
+      if (dist < minDist) {
+        minDist = dist;
+        closest = i;
+      }
+    });
+    return closest;
+  };
+
+  const scrollToIndex = (index: number) => {
+    const container = carouselRef.current;
+    const item = itemRefs.current[index];
+    if (!container || !item) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const paddingLeft = parseFloat(getComputedStyle(container).paddingLeft) || 0;
+    const itemRect = item.getBoundingClientRect();
+    const target = container.scrollLeft + (itemRect.left - containerRect.left) - paddingLeft;
+
+    if (animationRef.current) cancelAnimationFrame(animationRef.current);
+
+    const start = container.scrollLeft;
+    const distance = target - start;
+    const duration = 550;
+    const startTime = performance.now();
+
+    const step = (now: number) => {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      container.scrollLeft = start + distance * easeOutCubic(t);
+      if (t < 1) {
+        animationRef.current = requestAnimationFrame(step);
+      } else {
+        animationRef.current = null;
+      }
+    };
+    animationRef.current = requestAnimationFrame(step);
   };
 
   useEffect(() => {
-    checkScroll();
-    window.addEventListener('resize', checkScroll);
-    return () => window.removeEventListener('resize', checkScroll);
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
   }, []);
 
+  // loop: al llegar a la última card, la próxima vuelve a la primera
   const scrollNext = () => {
-    if (carouselRef.current) {
-      const cardWidth = window.innerWidth < 640 ? window.innerWidth * 0.85 + 16 : 420 + 24;
-      carouselRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
-    }
+    if (!projects.length) return;
+    const current = getClosestIndex();
+    const next = (current + 1) % projects.length;
+    scrollToIndex(next);
   };
 
   return (
@@ -42,14 +89,17 @@ export const Proyectos: React.FC = () => {
 
       <Reveal delay={0.1}>
         <div className="relative group/carousel">
-          <div 
+          <div
             ref={carouselRef}
-            onScroll={checkScroll}
             className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory px-4 md:px-6 xl:px-[max(1.5rem,calc((100vw-80rem)/2))] pb-8 [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {projects.map((project) => (
-              <div key={project.id} className="snap-start shrink-0 w-[85vw] sm:w-[420px]">
+            {projects.map((project, idx) => (
+              <div
+                key={project.id}
+                ref={(el) => { itemRefs.current[idx] = el; }}
+                className="snap-start shrink-0 w-[85vw] sm:w-[420px]"
+              >
                 <Link
                   to={`/proyectos/${project.slug}`}
                   className="group relative block aspect-[3/4] rounded-2xl md:rounded-card overflow-hidden bg-bg"
@@ -84,29 +134,20 @@ export const Proyectos: React.FC = () => {
           </div>
           
           {/* Blur & Gradient Overlay for right edge */}
-          <div 
-            className={cn(
-              "absolute right-0 top-0 bottom-8 w-32 md:w-64 pointer-events-none z-10 backdrop-blur-md bg-navy/10 transition-opacity duration-500",
-              isEnd ? "opacity-0" : "opacity-100"
-            )}
-            style={{ 
+          <div
+            className="absolute right-0 top-0 bottom-8 w-32 md:w-64 pointer-events-none z-10 backdrop-blur-md bg-navy/10"
+            style={{
               WebkitMaskImage: 'linear-gradient(to left, black 0%, transparent 100%)',
               maskImage: 'linear-gradient(to left, black 0%, transparent 100%)'
             }}
           />
 
-          {/* Botón de navegación (flotante derecha, desktop y mobile) */}
-          <div 
-            className={cn(
-              "absolute right-4 md:right-8 xl:right-[calc((100vw-80rem)/2+2rem)] top-[calc(50%-1rem)] -translate-y-1/2 z-20 pointer-events-none transition-opacity duration-300",
-              isEnd ? "opacity-0" : "opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
-            )}
-          >
-             <button 
+          {/* Botón de navegación (flotante derecha, desktop y mobile) — loop infinito, nunca se desactiva */}
+          <div className="absolute right-4 md:right-8 xl:right-[calc((100vw-80rem)/2+2rem)] top-[calc(50%-1rem)] -translate-y-1/2 z-20 pointer-events-none opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100 transition-opacity duration-300">
+             <button
                 onClick={scrollNext}
-                className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center text-navy shadow-[0_4px_30px_rgba(0,0,0,0.5)] pointer-events-auto hover:scale-105 active:scale-95 transition-transform hover:bg-brand hover:text-white"
+                className="relative w-12 h-12 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center text-navy shadow-[0_4px_30px_rgba(0,0,0,0.5)] pointer-events-auto hover:scale-105 active:scale-95 transition-transform hover:bg-brand hover:text-white before:content-[''] before:absolute before:inset-[-24px] md:before:inset-[-32px]"
                 aria-label="Siguiente proyecto"
-                disabled={isEnd}
               >
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
               </button>

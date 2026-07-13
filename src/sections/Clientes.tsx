@@ -4,14 +4,14 @@ import { clients } from '../data/clients';
 
 export const Clientes: React.FC = () => {
   return (
-    <section className="py-24 bg-bg border-y border-white/5">
-      <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
+    <section className="py-10 md:py-12 bg-bg border-y border-white/5">
+      <div className="max-w-7xl mx-auto px-6 mb-8 md:mb-10 text-center">
         <h3 className="font-display text-muted font-medium tracking-widest uppercase text-sm">
           Marcas que avanzan con nosotros
         </h3>
       </div>
-      
-      <Marquee speed={60} pauseOnHover className="mb-8">
+
+      <Marquee speed={60} pauseOnHover>
         {clients.map(client => (
           <div key={client.id} className="flex items-center justify-center w-36 md:w-48 shrink-0">
             <img

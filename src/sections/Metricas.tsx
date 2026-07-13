@@ -1,14 +1,16 @@
 import React from 'react';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { stats } from '../data/stats';
+import { services } from '../data/services';
 import { Reveal } from '../components/Reveal';
+import { Marquee } from '../components/Marquee';
 
 export const Metricas: React.FC = () => {
   return (
-    <section className="pb-24 md:pb-32 bg-mist relative">
+    <section className="bg-mist relative">
       <div className="max-w-5xl mx-auto px-6">
         <Reveal>
-          <div className="rounded-pill border border-brand/25 bg-white/60 backdrop-blur-sm px-6 py-8 md:px-12 md:py-6 overflow-x-auto">
+          <div className="rounded-pill border border-brand/40 bg-mist px-6 py-8 md:px-12 md:py-6 overflow-x-auto">
             <div className="flex flex-nowrap md:flex-row items-center justify-between gap-8 md:gap-4 min-w-max md:min-w-0">
               {stats.map((stat) => (
                 <div key={stat.id} className="flex flex-col items-center text-center shrink-0">
@@ -24,6 +26,12 @@ export const Metricas: React.FC = () => {
             </div>
           </div>
         </Reveal>
+      </div>
+
+      <div className="mt-16 md:mt-24 bg-brand py-6 md:py-8 w-full">
+        <Marquee speed={40} className="font-display font-black text-xl md:text-3xl text-white tracking-widest uppercase">
+          {services.map((s) => s.titulo.toUpperCase()).join(' › ')} ›&nbsp;
+        </Marquee>
       </div>
     </section>
   );

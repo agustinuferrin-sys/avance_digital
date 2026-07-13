@@ -1,5 +1,5 @@
 export const servicesHeader = {
-  titulo: "Servicios que trabajan en una misma dirección.",
+  titulo: "Soluciones para\npotenciar tu marca.",
   bajada: "Cada marca necesita un camino distinto. Por eso activamos las áreas que tienen sentido según su etapa, objetivo y oportunidad de crecimiento.",
   cta: "Conocé cómo podemos acompañar tu marca",
 };
@@ -40,7 +40,7 @@ export const services = [
 ];
 
 export const servicesCierre = {
-  titulo: "No son servicios aislados.\nSon áreas que se conectan.",
+  titulo: "No hablamos de marketing.\nMostramos lo que el marketing soluciona.",
   bajada: "El valor de AVANCE® está en entender qué necesita cada marca y activar las herramientas correctas para que todo trabaje con una misma dirección.",
   cta: "Hablemos de tu marca",
 };

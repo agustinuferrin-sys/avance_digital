@@ -13,7 +13,8 @@ export const Filosofia: React.FC = () => {
           loop
           muted
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full object-cover"
+          style={{ height: '200%', transform: 'translateY(-50%)' }}
         />
       </div>
 

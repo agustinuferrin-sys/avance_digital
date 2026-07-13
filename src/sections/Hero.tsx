@@ -4,8 +4,10 @@ import { Button } from '../components/Button';
 import { Marquee } from '../components/Marquee';
 import { Reveal } from '../components/Reveal';
 
+const TITLE_BOLD_WORDS = ["SOCIO", "ESTRATÉGICO"];
+
 export const Hero: React.FC = () => {
-  const titleWords = "El socio estratégico que tu marca necesita.".split(" ");
+  const titleWords = "EL SOCIO ESTRATÉGICO QUE TU MARCA NECESITA.".split(" ");
 
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden bg-bg pt-20">
@@ -17,7 +19,8 @@ export const Hero: React.FC = () => {
           loop
           muted
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full object-cover"
+          style={{ height: '200%', transform: 'translateY(0%)' }}
         />
       </div>
 
@@ -27,19 +30,23 @@ export const Hero: React.FC = () => {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand/[0.05] via-transparent to-transparent pointer-events-none" />
       
       <div className="flex-1 flex flex-col items-center justify-center text-center px-4 max-w-7xl mx-auto z-10 relative mt-20 md:mt-0">
-        <h1 className="font-display font-black leading-[1.05] tracking-[-0.02em] mb-8 text-5xl md:text-6xl lg:text-7xl xl:text-8xl flex flex-wrap justify-center gap-x-[0.2em]">
-          {titleWords.map((word, i) => (
-            <span key={i} className="overflow-hidden inline-block pb-2">
-              <motion.span
-                className={`inline-block ${word.includes('estratégico') ? 'text-brand' : 'text-white'}`}
-                initial={{ y: "100%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {word}
-              </motion.span>
-            </span>
-          ))}
+        <h1 className="leading-[1.05] tracking-[-0.02em] mb-8 text-5xl md:text-6xl lg:text-7xl xl:text-8xl flex flex-wrap justify-center gap-x-[0.2em]">
+          {titleWords.map((word, i) => {
+            const isBold = TITLE_BOLD_WORDS.includes(word.replace('.', ''));
+            return (
+              <span key={i} className="overflow-hidden inline-block pb-2">
+                <motion.span
+                  className={`inline-block ${word.includes('ESTRATÉGICO') ? 'text-brand' : 'text-white'}`}
+                  style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: isBold ? 800 : 100 }}
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 1, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {word}
+                </motion.span>
+              </span>
+            );
+          })}
         </h1>
 
         <Reveal delay={0.6}>
