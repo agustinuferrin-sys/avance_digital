@@ -50,8 +50,8 @@ export const Hero: React.FC = () => {
         </h1>
 
         <Reveal delay={0.6}>
-          <p className="text-xl md:text-2xl text-white/90 font-medium mb-12 max-w-[90vw] md:max-w-none mx-auto text-center tracking-tight drop-shadow-md md:whitespace-nowrap">
-            Somos más que una agencia. Somos el socio estratégico que piensa con vos.
+          <p className="text-lg md:text-xl lg:text-lg xl:text-xl text-white/90 font-medium mb-12 max-w-[90vw] md:max-w-none mx-auto text-center tracking-tight drop-shadow-md lg:whitespace-nowrap">
+            Somos una agencia de crecimiento y comunicación estratégica para marcas que quieren crecer con dirección.
           </p>
         </Reveal>
 

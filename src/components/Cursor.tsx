@@ -38,7 +38,7 @@ export const Cursor: React.FC = () => {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-8 h-8 rounded-full border border-brand bg-brand/10 pointer-events-none z-[9999] hidden lg:flex mix-blend-screen items-center justify-center transition-colors duration-300"
+      className="fixed top-0 left-0 w-8 h-8 rounded-full border border-brand bg-brand/10 pointer-events-none z-[100000] hidden lg:flex mix-blend-screen items-center justify-center transition-colors duration-300"
       style={{
         x: cursorX,
         y: cursorY,

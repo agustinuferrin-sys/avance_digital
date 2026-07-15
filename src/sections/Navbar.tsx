@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { Button } from '../components/Button';
+import { GradientButton } from '../components/GradientButton';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,10 +27,10 @@ export const Navbar: React.FC = () => {
 
   const links: { id: string; label: string }[] = [
     { id: 'servicios', label: 'SERVICIOS' },
-    { id: 'sistema', label: 'SISTEMA AVANCE®' },
-    { id: 'faq', label: "FAQ'S" },
+    { id: 'sistema', label: 'MÉTODO AVANCE®' },
     { id: 'proyectos', label: 'PROYECTOS' },
     { id: 'es-para-vos', label: 'ABOUT' },
+    { id: 'faq', label: "FAQ'S" },
   ];
 
   return (
@@ -44,7 +44,7 @@ export const Navbar: React.FC = () => {
         <div className="hidden lg:flex items-center gap-8">
           <div className="flex gap-6 text-sm font-medium items-center">
             {links.map(l => (
-              <button key={l.id} onClick={() => go(l.id)} className="hover:text-brand transition-colors whitespace-nowrap">
+              <button key={l.id} onClick={() => go(l.id)} className="px-3 py-2 rounded-pill hover:text-brand hover:bg-brand/10 transition-colors duration-200 whitespace-nowrap">
                 {l.label}
               </button>
             ))}
@@ -52,9 +52,9 @@ export const Navbar: React.FC = () => {
               PLANTILLAS EDITABLES
             </Link>
           </div>
-          <Button onClick={() => go('contacto')} className="px-6 py-2.5 text-sm animate-pulse-glow">
+          <GradientButton onClick={() => go('contacto')}>
             AVANCEMOS
-          </Button>
+          </GradientButton>
         </div>
 
         {/* Mobile Toggle */}
@@ -74,9 +74,9 @@ export const Navbar: React.FC = () => {
           <Link to="/plantillas" onClick={() => { setIsOpen(false); window.scrollTo(0, 0); }} className="text-2xl font-display font-bold text-left text-brand">
             PLANTILLAS EDITABLES
           </Link>
-          <button onClick={() => go('contacto')} className="text-2xl font-display font-bold text-brand mt-4 text-left">
+          <GradientButton onClick={() => go('contacto')} className="mt-4 w-full">
             AVANCEMOS
-          </button>
+          </GradientButton>
         </div>
       )}
     </nav>

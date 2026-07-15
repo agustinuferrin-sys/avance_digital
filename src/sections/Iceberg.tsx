@@ -7,139 +7,328 @@ import { useLenis } from 'lenis/react';
 const itemsArriba = ['Redes', 'Contenido', 'Diseño', 'Publicidad', 'Producciones', 'Web', 'Resultados'];
 const itemsAbajo = ['Diagnóstico', 'Estrategia', 'Identidad', 'Posicionamiento', 'Mensaje', 'Oferta', 'Procesos', 'Análisis', 'Constancia'];
 
-const LeaderItem: React.FC<{ label: string; delay: number }> = ({ label, delay }) => (
-  <motion.div
-    initial={{ opacity: 0, x: 24 }}
-    whileInView={{ opacity: 1, x: 0 }}
-    viewport={{ once: true, margin: '-40px' }}
-    transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
-    className="flex items-center gap-3"
-  >
-    <span className="w-2 h-2 rounded-full border border-white/60 shrink-0" />
-    <span className="h-px flex-1 bg-white/15 min-w-[24px] md:min-w-[48px]" style={{ borderTop: '1px dashed rgba(255,255,255,0.25)', background: 'none' }} />
-    <span className="text-white/85 font-body font-light text-sm md:text-base whitespace-nowrap">{label}</span>
-  </motion.div>
-);
+// --- SISTEMA GEOMÉTRICO ÚNICO (en rem), compartido por las dos zonas y los
+// dos lados. Un solo número por regla — nunca un ajuste particular por item. ---
+
+// % de la SECCIÓN (no de la imagen) donde parten las dos zonas de texto —
+// arriba = emergido, abajo = sumergido. Misma referencia que el object-position
+// de la imagen de fondo, para que la línea de agua caiga entre ambas zonas.
+const WATERLINE_PERCENT = 43;
+
+// Aire (en %) entre la zona "LO QUE SE VE" y la zona "LO QUE HACEMOS".
+const BAND_GAP_PERCENT = 6;
+
+// Ancho (en rem) de la columna CENTRAL del grid de 3 columnas — el gutter
+// donde cae el iceberg. Fijo y compartido por las dos zonas (mismo valor en
+// "LO QUE SE VE" y "LO QUE HACEMOS"), para que el iceberg no salte de
+// posición entre zonas. Las columnas laterales son 1fr (mismo fr los dos
+// lados) — la simetría sale de la estructura del grid, no de un cálculo.
+const GUTTER_REM = 5;
+
+// Cuánto (en rem) bajan las columnas de items respecto al techo de su zona,
+// reservando ese espacio fijo para el título — mismo valor en las dos zonas,
+// así el título nunca se superpone ni se corta.
+const COLUMNS_TOP_REM = 7;
+
+// Espaciado vertical (en rem) entre items dentro de una misma columna.
+const ITEM_GAP_REM = 0.9;
+
+// Desfase (en px) para que la columna DERECHA arranque más abajo que la
+// izquierda — mismo valor en las dos zonas. A propósito para que ambas
+// columnas no queden a la misma altura exacta (efecto demasiado simétrico).
+const RIGHT_COLUMN_OFFSET_PX = 22;
+
+// Separación (en px) entre el cierre de Filosofia (la marquee celeste
+// "ESTRATÉGIA › RESULTADOS › AVANZÁ › MÉTODO") y el arranque visual del
+// iceberg. Vive DENTRO del stage —como una franja extra arriba, con imagen y
+// contenido pegados abajo— y NO como padding/margin/border de la <section>:
+// así el resplandor radial (que es hijo del stage) cubre también esta franja
+// y el fade es continuo, sin una banda negra lisa cortando en seco contra la
+// marquee.
+const STAGE_TOP_GAP_PX = 80;
+
+// Alto "de siempre" del stage (imagen + columnas de texto), sin contar la
+// franja de separación de arriba. Toda la matemática en % de WATERLINE_PERCENT
+// y BAND_GAP_PERCENT sigue siendo relativa a ESTA altura, no a la del stage
+// completo (que ahora incluye STAGE_TOP_GAP_PX).
+const STAGE_HEIGHT_VH = 150;
+
+// Separación (en px) entre el título y el subtítulo de cada zona — base de
+// las dos zonas (equivale al mt-1 de siempre). TextZone puede sumarle un
+// extra puntual por zona vía la prop subtitleGapExtraPx (hoy solo lo usa
+// "LO QUE HACEMOS", para que respire más contra "LO QUE SE VE" sin tocarla).
+const SUBTITLE_GAP_PX = 4;
+
+// Los primeros items de la lista van a la columna IZQUIERDA y el resto a la
+// DERECHA — misma regla para las dos zonas:
+//   LO QUE SE VE   (7 items) → 3 izquierda / 4 derecha
+//   LO QUE HACEMOS (9 items) → 4 izquierda / 5 derecha
+// Verificado: left.length + right.length === items.length siempre (slice
+// contiguo sin filtrar nada, no se descarta ningún índice).
+const splitItems = (items: string[]): { left: string[]; right: string[] } => {
+  const leftCount = Math.floor(items.length / 2);
+  const left = items.slice(0, leftCount);
+  const right = items.slice(leftCount);
+  if (left.length + right.length !== items.length) {
+    // No debería poder pasar (slice contiguo), pero si algún día cambia la
+    // regla de split, esto avisa en desarrollo en vez de perder items en silencio.
+    console.error('[Iceberg] splitItems perdió items:', { items, left, right });
+  }
+  return { left, right };
+};
+
+// La lista entera "swipea" de una sola vez al entrar en pantalla (whileInView,
+// una vez), con un stagger interno entre items — NO depende de cuánto siga
+// bajando la rueda del mouse después de disparar el swipe.
+const listVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+};
+
+const itemVariants = (direction: 'left' | 'right') => ({
+  hidden: { opacity: 0, x: direction === 'left' ? -24 : 24 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+});
+
+const lineVariants = {
+  hidden: { scaleX: 0 },
+  visible: { scaleX: 1, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+};
+
+// Fila de un item. Línea (grosor/punteado/opacidad) y punto IDÉNTICOS para
+// las dos columnas — lo único que cambia es el ORDEN visual: el punto
+// siempre queda del lado que apunta al iceberg. La línea es flex-1 (100%
+// del ancho disponible en la fila) en vez de un ancho fijo: al ocupar toda
+// la fila (w-full), el punto queda pegado al borde de la columna sin
+// importar cuánto texto tenga el label.
+const LeaderItem: React.FC<{ label: string; direction: 'left' | 'right' }> = ({ label, direction }) => {
+  const isLeft = direction === 'left';
+  return (
+    <motion.div
+      variants={itemVariants(direction)}
+      className={`flex items-center gap-3 w-full ${isLeft ? 'flex-row-reverse' : ''}`}
+    >
+      <span className="w-2 h-2 rounded-full border border-white/60 shrink-0" />
+      <motion.span
+        variants={lineVariants}
+        style={{
+          transformOrigin: isLeft ? 'right' : 'left',
+          borderTop: '1px dashed rgba(255,255,255,0.25)',
+        }}
+        className="h-px flex-1 min-w-0"
+      />
+      <span
+        className={`text-white/85 font-body font-light text-base md:text-xl lg:text-2xl whitespace-nowrap ${
+          isLeft ? 'text-right' : 'text-left'
+        }`}
+      >
+        {label}
+      </span>
+    </motion.div>
+  );
+};
+
+// Frase manuscrita que se "escribe" letra por letra cuando entra en vista,
+// en vez de aparecer toda junta o con un delay fijo.
+const TypewriterPhrase: React.FC<{ text: string }> = ({ text }) => {
+  const characters = Array.from(text);
+  return (
+    <p
+      className="text-white/90 text-2xl md:text-3xl"
+      style={{ fontFamily: "'Caveat', cursive", transform: 'rotate(-3deg)' }}
+    >
+      {characters.map((char, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.01, delay: i * 0.028 }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </p>
+  );
+};
+
+// Columna de items (izquierda o derecha), pensada para vivir como una celda
+// del grid de 3 columnas de TextZone. Ambas comparten TODO: gap vertical,
+// flex-col simple sin posicionamiento propio — el grid padre es quien decide
+// dónde cae cada columna, esta solo apila sus items.
+const ItemColumn: React.FC<{ items: string[]; direction: 'left' | 'right'; style?: React.CSSProperties }> = ({
+  items,
+  direction,
+  style,
+}) => {
+  return (
+    <motion.div
+      className="flex flex-col"
+      style={{ gap: `${ITEM_GAP_REM}rem`, ...style }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-100px' }}
+      variants={listVariants}
+    >
+      {items.map((label) => (
+        <LeaderItem key={label} label={label} direction={direction} />
+      ))}
+    </motion.div>
+  );
+};
+
+// Una zona de texto. Estructura fija, igual en las dos zonas salvo por los
+// dos extras opcionales (subtitleGapExtraPx, columnsTopExtraPx), pensados
+// para ajustes puntuales de una zona sin tocar la otra:
+//  1) título + subtítulo ARRIBA DE TODO, alineados a la izquierda.
+//  2) debajo (a partir de COLUMNS_TOP_REM + columnsTopExtraPx, nunca antes),
+//     dos columnas de items en espejo a los costados del centro del iceberg.
+const TextZone: React.FC<{
+  top: string;
+  height: string;
+  title: string;
+  subtitle: string;
+  items: string[];
+  subtitleGapExtraPx?: number;
+  columnsTopExtraPx?: number;
+}> = ({ top, height, title, subtitle, items, subtitleGapExtraPx = 0, columnsTopExtraPx = 0 }) => {
+  const { left, right } = splitItems(items);
+
+  return (
+    <div className="absolute inset-x-0" style={{ top, height }}>
+      <div className="relative max-w-7xl mx-auto px-6 h-full flex flex-col gap-6 pt-4 md:block md:pt-0">
+        {/* título — siempre arriba de todo, alineado a la izquierda. El
+            wrapper (no Reveal, que fuerza su propio position:relative inline)
+            es quien se posiciona absoluto */}
+        <div className="md:absolute md:top-0 md:left-0 md:max-w-xs lg:max-w-sm">
+          <Reveal>
+            <h2 className="font-display font-black text-3xl md:text-4xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40 tracking-tight">
+              {title}
+            </h2>
+            <p
+              className="text-muted font-light text-sm lg:text-base"
+              style={{ marginTop: `${SUBTITLE_GAP_PX + subtitleGapExtraPx}px` }}
+            >
+              {subtitle}
+            </p>
+          </Reveal>
+        </div>
+
+        {/* MOBILE — lista única en orden original, apilada debajo del título,
+            sin columnas espejadas (ese recurso es de desktop, con el fondo
+            grande del iceberg). Todos los items, sin split. */}
+        <motion.div
+          className="flex flex-col gap-2.5 md:hidden"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={listVariants}
+        >
+          {items.map((label) => (
+            <LeaderItem key={`m-${label}`} label={label} direction="right" />
+          ))}
+        </motion.div>
+
+        {/* DESKTOP — grid explícito de 3 columnas: izquierda (1fr) | gutter
+            central fijo (GUTTER_REM, vacío/transparente — ahí cae el iceberg
+            de fondo) | derecha (1fr, mismo fr que la izquierda). La simetría
+            es estructural: las dos columnas laterales miden lo mismo por
+            definición del grid, así que el punto de cada leader-line (que
+            ocupa el 100% de su columna) llega al mismo x de los dos lados
+            sin ningún cálculo manual de distancias. */}
+        <div
+          className="hidden md:grid absolute inset-x-0"
+          style={{
+            top: `calc(${COLUMNS_TOP_REM}rem + ${columnsTopExtraPx}px)`,
+            gridTemplateColumns: `1fr ${GUTTER_REM}rem 1fr`,
+          }}
+        >
+          <ItemColumn items={left} direction="left" />
+          <div aria-hidden="true" />
+          <ItemColumn items={right} direction="right" style={{ marginTop: `${RIGHT_COLUMN_OFFSET_PX}px` }} />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const Iceberg: React.FC = () => {
   const lenis = useLenis();
   const scrollToContacto = () => lenis?.scrollTo('#contacto', { offset: -80 });
 
   return (
-    <section id="iceberg" className="relative min-h-screen bg-bg overflow-hidden">
-      {/* ZONA SUPERIOR — LO QUE SE VE */}
-      <div className="relative pt-20 md:pt-28 pb-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <Reveal>
-            <h2 className="font-display font-black text-4xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40 tracking-tight">
-              LO QUE SE VE
-            </h2>
-            <p className="text-muted font-light mt-2">Es solo una parte</p>
-          </Reveal>
-        </div>
+    <section id="iceberg" className="relative bg-bg">
+      {/* STAGE — imagen y texto totalmente DESACOPLADOS. El stage mide
+          STAGE_TOP_GAP_PX + STAGE_HEIGHT_VH: una franja de separación arriba
+          (cubierta por el resplandor, para que no corte contra la marquee de
+          Filosofia) y, pegados abajo, la imagen y el texto de siempre, en su
+          altura de siempre. */}
+      <div
+        className="relative overflow-hidden"
+        style={{ minHeight: `calc(${STAGE_TOP_GAP_PX}px + ${STAGE_HEIGHT_VH}vh)` }}
+      >
+        {/* RESPLANDOR — cubre TODO el stage, incluida la franja de separación
+            de arriba (el .webp tiene canal alfa: el recorte del hielo tiene
+            transparencia alrededor). Nace en un celeste/cian tenue (tokens
+            skyLight/blue) centrado en la posición de siempre del iceberg —
+            recalculada acá para que caiga en el mismo punto absoluto aunque
+            el stage ahora sea más alto— y se apaga hacia transparente,
+            fundiéndose con el bg de forma continua desde la marquee hasta el
+            iceberg. */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle at 50% calc(${STAGE_TOP_GAP_PX}px + (100% - ${STAGE_TOP_GAP_PX}px) * ${WATERLINE_PERCENT / 100}), color-mix(in srgb, var(--color-skyLight) 35%, transparent) 0%, color-mix(in srgb, var(--color-blue) 18%, transparent) 30%, transparent 62%)`,
+          }}
+        />
+        {/* CAPA DE FONDO — pegada abajo del stage, misma altura de siempre
+            (STAGE_HEIGHT_VH); la franja de separación queda arriba, afuera de
+            esta imagen, cubierta solo por el resplandor. */}
+        <img
+          src="/images/iceberg/iceberg.webp"
+          alt="Iceberg completo: la parte visible arriba y la masa sumergida abajo"
+          className="absolute inset-x-0 bottom-0 z-0 w-full object-cover pointer-events-none select-none"
+          style={{ height: `${STAGE_HEIGHT_VH}vh`, objectPosition: `50% ${WATERLINE_PERCENT}%` }}
+        />
 
-        <div className="max-w-7xl mx-auto px-6 mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
-          <div className="flex justify-center md:justify-start">
-            <img
-              src="/images/iceberg/top.webp"
-              alt="Pico del iceberg"
-              className="h-[28vh] md:h-[38vh] w-auto object-contain drop-shadow-[0_10px_40px_rgba(147,197,253,0.15)]"
-            />
-          </div>
-          <div className="flex flex-col gap-4 md:gap-5 pb-4">
-            {itemsArriba.map((label, i) => (
-              <LeaderItem key={label} label={label} delay={i * 0.08} />
-            ))}
-          </div>
+        {/* CAPA DE CONTENIDO — mismo criterio: pegada abajo, altura de
+            siempre, en % de ESA altura (no de la del stage completo). */}
+        <div className="absolute inset-x-0 bottom-0 z-10" style={{ height: `${STAGE_HEIGHT_VH}vh` }}>
+          <TextZone
+            top="0%"
+            height={`${WATERLINE_PERCENT - BAND_GAP_PERCENT / 2}%`}
+            title="LO QUE SE VE"
+            subtitle="Es solo una parte"
+            items={itemsArriba}
+          />
+          <TextZone
+            top={`${WATERLINE_PERCENT + BAND_GAP_PERCENT / 2}%`}
+            height={`${100 - WATERLINE_PERCENT - BAND_GAP_PERCENT / 2}%`}
+            title="LO QUE HACEMOS"
+            subtitle="Es lo que sostiene el crecimiento"
+            items={itemsAbajo}
+            subtitleGapExtraPx={20}
+            columnsTopExtraPx={132}
+          />
         </div>
       </div>
 
-      {/* LÍNEA DE AGUA */}
-      <div className="relative w-full h-[10vh] md:h-[14vh]">
-        <motion.img
-          src="/images/iceberg/water.webp"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-          animate={{ x: [0, -8, 0] }}
-          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ filter: 'brightness(1)' }}
-        />
-        <motion.img
-          src="/images/iceberg/water.webp"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          animate={{ opacity: [0.5, 0.8, 0.5] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ filter: 'brightness(1.15)', mixBlendMode: 'screen' }}
-        />
-        {/* Overlays de ola SVG animados */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.svg
-            className="absolute top-1/2 -translate-y-1/2 h-10 md:h-14 w-[200%]"
-            viewBox="0 0 1600 60"
-            preserveAspectRatio="none"
-            animate={{ x: ['0%', '-50%'] }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-          >
-            <path
-              d="M0,30 Q50,10 100,30 T200,30 T300,30 T400,30 T500,30 T600,30 T700,30 T800,30 T900,30 T1000,30 T1100,30 T1200,30 T1300,30 T1400,30 T1500,30 T1600,30"
-              fill="none" stroke="#93C5FD" strokeWidth="2" opacity="0.2"
-            />
-          </motion.svg>
-          <motion.svg
-            className="absolute top-1/2 -translate-y-1/2 h-6 md:h-8 w-[200%]"
-            viewBox="0 0 1600 40"
-            preserveAspectRatio="none"
-            animate={{ x: ['0%', '-50%'] }}
-            transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-          >
-            <path
-              d="M0,20 Q40,5 80,20 T160,20 T240,20 T320,20 T400,20 T480,20 T560,20 T640,20 T720,20 T800,20 T880,20 T960,20 T1040,20 T1120,20 T1200,20 T1280,20 T1360,20 T1440,20 T1520,20 T1600,20"
-              fill="none" stroke="#1B4DE4" strokeWidth="2" opacity="0.25"
-            />
-          </motion.svg>
-        </div>
-      </div>
-
-      {/* ZONA INFERIOR — LO QUE HACEMOS */}
-      <div className="relative pt-8 pb-24 md:pb-32 bg-gradient-to-b from-navy to-bg">
-        <div className="max-w-7xl mx-auto px-6">
-          <Reveal>
-            <h2 className="font-display font-black text-4xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40 tracking-tight">
-              LO QUE HACEMOS
-            </h2>
-            <p className="text-muted font-light mt-2">Es lo que sostiene el crecimiento</p>
-          </Reveal>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-          <div className="flex justify-center md:justify-start order-2 md:order-1">
-            <img
-              src="/images/iceberg/bottom.webp"
-              alt="Masa sumergida del iceberg"
-              className="h-[38vh] md:h-[55vh] w-auto object-contain opacity-90"
-              style={{ filter: 'blur(0.5px)' }}
-            />
+      {/* CIERRE — frase manuscrita + CTA, en flujo normal debajo del stage */}
+      <div className="relative pt-10 pb-16 md:pb-20">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col items-center gap-10">
+          <div className="w-full flex justify-start md:pl-2 lg:pl-6">
+            <TypewriterPhrase text="Cada acción necesita una razón, una dirección y un objetivo" />
           </div>
-          <div className="flex flex-col gap-4 md:gap-5 order-1 md:order-2">
-            {itemsAbajo.map((label, i) => (
-              <LeaderItem key={label} label={label} delay={0.4 + i * 0.08} />
-            ))}
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 mt-16 flex flex-col items-center gap-10 text-center">
-          <p
-            className="text-white/90 text-2xl md:text-3xl"
-            style={{ fontFamily: "'Caveat', cursive", transform: 'rotate(-3deg)' }}
-          >
-            Cada acción necesita una razón, una dirección y un objetivo
-          </p>
           <Button onClick={scrollToContacto}>
             Quiero trabajar con <span className="font-black">método</span>
           </Button>
         </div>
       </div>
+
+      {/* TRANSICIÓN — difumina el negro de esta sección hacia el mist claro de
+          Servicios (la próxima sección), para que el cambio oscuro→claro no
+          sea un corte seco. */}
+      <div className="h-24 md:h-32 bg-gradient-to-b from-bg to-mist" aria-hidden="true" />
     </section>
   );
 };

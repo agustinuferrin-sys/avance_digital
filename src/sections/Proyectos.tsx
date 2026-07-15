@@ -5,12 +5,14 @@ import { SectionHeading } from '../components/SectionHeading';
 import { Reveal } from '../components/Reveal';
 import { projects } from '../data/projects';
 
-const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-
 export const Proyectos: React.FC = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const animationRef = useRef<number | null>(null);
+  // índice hacia el que apunta el último scroll pedido (0..projects.length, donde
+  // projects.length es el clon del primer proyecto al final de la lista). Se usa en vez
+  // de recalcular la posición actual en pleno vuelo, que es lo que causaba que clicks
+  // rápidos se salteen proyectos.
+  const pendingIndexRef = useRef(0);
 
   // índice de la card actualmente "encajada" contra el borde izquierdo del carrusel
   const getClosestIndex = (): number => {
@@ -33,48 +35,61 @@ export const Proyectos: React.FC = () => {
     return closest;
   };
 
-  const scrollToIndex = (index: number) => {
+  // posición absoluta de scroll necesaria para encajar item[index] contra el borde izquierdo
+  const computeTargetScrollLeft = (index: number): number | null => {
     const container = carouselRef.current;
     const item = itemRefs.current[index];
-    if (!container || !item) return;
-
+    if (!container || !item) return null;
     const containerRect = container.getBoundingClientRect();
     const paddingLeft = parseFloat(getComputedStyle(container).paddingLeft) || 0;
     const itemRect = item.getBoundingClientRect();
-    const target = container.scrollLeft + (itemRect.left - containerRect.left) - paddingLeft;
-
-    if (animationRef.current) cancelAnimationFrame(animationRef.current);
-
-    const start = container.scrollLeft;
-    const distance = target - start;
-    const duration = 550;
-    const startTime = performance.now();
-
-    const step = (now: number) => {
-      const elapsed = now - startTime;
-      const t = Math.min(elapsed / duration, 1);
-      container.scrollLeft = start + distance * easeOutCubic(t);
-      if (t < 1) {
-        animationRef.current = requestAnimationFrame(step);
-      } else {
-        animationRef.current = null;
-      }
-    };
-    animationRef.current = requestAnimationFrame(step);
+    return container.scrollLeft + (itemRect.left - containerRect.left) - paddingLeft;
   };
 
+  // Mantiene pendingIndexRef sincronizado si el usuario arrastra el carrusel a mano
+  // (en vez de usar la flecha) — solo actualiza el índice, nunca mueve el scroll, así no
+  // pelea con el gesto del usuario ni con el reset del loop (ver scrollNext).
   useEffect(() => {
+    const container = carouselRef.current;
+    if (!container) return;
+    let settleTimeout: number;
+
+    const handleScroll = () => {
+      window.clearTimeout(settleTimeout);
+      settleTimeout = window.setTimeout(() => {
+        pendingIndexRef.current = getClosestIndex();
+      }, 120);
+    };
+
+    container.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      container.removeEventListener('scroll', handleScroll);
+      window.clearTimeout(settleTimeout);
     };
   }, []);
 
-  // loop: al llegar a la última card, la próxima vuelve a la primera
+  // loop infinito: el render agrega un único clon del primer proyecto al final de la
+  // lista (ver JSX más abajo), así avanzar más allá de la última card real continúa
+  // visualmente hacia adelante en vez de "rebotar" para atrás. El reset (volver del clon
+  // al proyecto real 0) se hace acá, de forma determinística en el momento del click —no
+  // atado a un timer de "scroll asentado"— para que clicks rápidos y consecutivos nunca
+  // se traben ni se salteen proyectos.
   const scrollNext = () => {
-    if (!projects.length) return;
-    const current = getClosestIndex();
-    const next = (current + 1) % projects.length;
-    scrollToIndex(next);
+    const container = carouselRef.current;
+    if (!container || !projects.length) return;
+
+    if (pendingIndexRef.current === projects.length) {
+      const resetTarget = computeTargetScrollLeft(0);
+      if (resetTarget !== null) container.scrollLeft = resetTarget;
+      pendingIndexRef.current = 0;
+    }
+
+    const next = pendingIndexRef.current + 1;
+    pendingIndexRef.current = next;
+    const target = computeTargetScrollLeft(next);
+    if (target !== null) {
+      container.scrollTo({ left: target, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -94,15 +109,17 @@ export const Proyectos: React.FC = () => {
             className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory px-4 md:px-6 xl:px-[max(1.5rem,calc((100vw-80rem)/2))] pb-8 [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {projects.map((project, idx) => (
+            {[...projects, ...projects].map((project, idx) => (
               <div
-                key={project.id}
+                key={`${project.id}-${idx}`}
                 ref={(el) => { itemRefs.current[idx] = el; }}
                 className="snap-start shrink-0 w-[85vw] sm:w-[420px]"
               >
                 <Link
                   to={`/proyectos/${project.slug}`}
                   className="group relative block aspect-[3/4] rounded-2xl md:rounded-card overflow-hidden bg-bg"
+                  aria-hidden={idx >= projects.length}
+                  tabIndex={idx >= projects.length ? -1 : undefined}
                 >
                   <img
                     src={project.imagen}

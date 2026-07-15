@@ -47,7 +47,7 @@
 }
 
 @keyframes marquee {
-  to { transform: translateX(-50%); }
+  to { transform: translateX(calc(-100% / var(--copies, 2))); }
 }
 .animate-marquee {
   animation: marquee var(--speed, 40s) linear infinite;

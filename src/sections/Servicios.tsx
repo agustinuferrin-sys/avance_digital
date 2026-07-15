@@ -51,7 +51,7 @@ export const Servicios: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Header */}
         <Reveal>
-          <div className="mb-14 md:mb-16 text-center">
+          <div className="pt-6 md:pt-10 mb-16 md:mb-20 text-center">
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl tracking-tight leading-[1.1]">
               <span className="font-light text-ink/50">{headerLine1}</span>{' '}
               <span className="font-black text-brand">{headerLine2}</span>

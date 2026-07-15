@@ -31,10 +31,12 @@ export default function App() {
         href="https://wa.me/5491126448450"
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[99999] bg-brand text-white px-6 py-4 rounded-pill flex items-center gap-3 shadow-[0_0_30px_rgba(27,77,228,0.4)] hover:scale-105 hover:bg-brandAlt transition-all"
+        className="group fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[99999] inline-flex rounded-pill p-[2px] bg-gradient-to-r from-brand via-brandAlt to-skyLight shadow-[0_10px_25px_-8px_rgba(27,77,228,0.55)] transition-transform duration-300 ease-out hover:scale-105 active:scale-95"
       >
-        <MessageCircle className="w-5 h-5" />
-        <span className="font-semibold text-sm hidden md:block tracking-wider uppercase">Escribinos</span>
+        <span className="flex items-center gap-3 rounded-pill bg-bg px-6 py-4 transition-colors duration-300 group-hover:bg-transparent">
+          <MessageCircle className="w-5 h-5" />
+          <span className="font-semibold text-sm hidden md:block tracking-wider uppercase">Escribinos</span>
+        </span>
       </a>
     </ReactLenis>
   );
