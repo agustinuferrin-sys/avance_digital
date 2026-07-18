@@ -24,9 +24,12 @@ export const Filosofia: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto z-10 relative py-20">
         <Reveal delay={0.1}>
-          <h2 className="font-display font-black text-6xl md:text-8xl lg:text-9xl text-white mb-8 tracking-tight">
-            AVANCE<span className="text-brand">®</span>
-          </h2>
+          <img
+            src="/images/logo-avance.webp"
+            alt="AVANCE®"
+            className="w-[280px] md:w-[420px] lg:w-[520px] mb-8 mx-auto"
+            style={{ transform: 'rotate(0.68deg)' }}
+          />
         </Reveal>
         
         <Reveal delay={0.3}>
@@ -36,8 +39,8 @@ export const Filosofia: React.FC = () => {
         </Reveal>
 
         <Reveal delay={0.5}>
-          <div className="inline-block bg-brand text-white px-6 md:px-10 py-4 rounded-full font-body text-base md:text-lg shadow-[0_4px_30px_rgba(27,77,228,0.4)]">
-            <span className="font-light">No se trata de hacer más.</span> <strong className="font-black ml-1">Se trata de avanzar mejor.</strong>
+          <div className="inline-block bg-brand text-white px-8 md:px-12 py-4 md:py-5 rounded-full font-body text-lg md:text-2xl shadow-[0_4px_30px_rgba(24,113,255,0.4)]">
+            <span className="font-light">No se trata de hacer más.</span> <strong className="font-bold ml-1">Se trata de avanzar mejor.</strong>
           </div>
         </Reveal>
       </div>

@@ -58,7 +58,7 @@ export const Contacto: React.FC = () => {
 
             <div className="hidden lg:block mt-16 space-y-6">
               <div className="flex items-center gap-6 text-white group cursor-pointer w-fit" onClick={() => window.open(`https://wa.me/${WHATSAPP}`, '_blank')}>
-                <div className="w-16 h-16 bg-brand/10 border border-brand/20 rounded-full flex items-center justify-center group-hover:bg-brand group-hover:shadow-[0_0_20px_rgba(27,77,228,0.3)] transition-all duration-300">
+                <div className="w-16 h-16 bg-brand/10 border border-brand/20 rounded-full flex items-center justify-center group-hover:bg-brand group-hover:shadow-[0_0_20px_rgba(24,113,255,0.3)] transition-all duration-300">
                   <MessageCircle className="w-6 h-6 text-brand group-hover:text-white transition-colors" />
                 </div>
                 <div>
@@ -123,7 +123,7 @@ export const Contacto: React.FC = () => {
                 {status === 'error' && (
                   <p className="text-sm text-red-400">Hubo un problema al enviar. Probá de nuevo o escribinos por WhatsApp.</p>
                 )}
-                <Button type="button" onClick={handleSubmit} disabled={status === 'sending'} className="w-full mt-2 md:mt-4 py-4 md:py-5 text-base md:text-lg font-bold shadow-[0_0_30px_rgba(27,77,228,0.2)] hover:shadow-[0_0_40px_rgba(27,77,228,0.4)] disabled:opacity-60">
+                <Button type="button" onClick={handleSubmit} disabled={status === 'sending'} className="w-full mt-2 md:mt-4 py-4 md:py-5 text-base md:text-lg font-bold shadow-[0_0_30px_rgba(24,113,255,0.2)] hover:shadow-[0_0_40px_rgba(24,113,255,0.4)] disabled:opacity-60">
                   {status === 'sending' ? 'Enviando...' : 'Enviar mensaje'}
                 </Button>
               </div>

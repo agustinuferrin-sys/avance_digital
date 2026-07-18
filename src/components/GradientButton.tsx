@@ -15,7 +15,7 @@ export const GradientButton = React.forwardRef<HTMLButtonElement, GradientButton
         className={cn(
           'group relative inline-flex shrink-0 rounded-pill p-[2px]',
           'bg-gradient-to-r from-brand via-brandAlt to-skyLight',
-          'shadow-[0_10px_25px_-8px_rgba(27,77,228,0.55)]',
+          'shadow-[0_10px_25px_-8px_rgba(24,113,255,0.55)]',
           'transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95',
           className
         )}

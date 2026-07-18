@@ -21,12 +21,12 @@ export const methodSteps: MethodStep[] = [
     descripción: 'Convertimos la estrategia en acciones concretas: contenido, diseño, campañas, comunicación y publicidad.',
   },
   {
-    número: '04',
+    número: '05',
     título: 'Medir',
     descripción: 'Leemos datos, resultados y señales para tomar decisiones con criterio.',
   },
   {
-    número: '05',
+    número: '04',
     título: 'Escalar',
     descripción: 'Optimizamos lo que funciona y acompañamos el crecimiento de forma sostenible.',
   }

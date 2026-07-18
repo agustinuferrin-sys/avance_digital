@@ -45,8 +45,8 @@ export const Cursor: React.FC = () => {
       }}
       animate={{
         scale: isHovered ? 2.4 : 1,
-        backgroundColor: isHovered ? 'rgba(27,77,228,0.15)' : 'rgba(27,77,228,0.05)',
-        borderColor: isHovered ? 'rgba(147,197,253,0.9)' : 'rgba(27,77,228,1)',
+        backgroundColor: isHovered ? 'rgba(24,113,255,0.15)' : 'rgba(24,113,255,0.05)',
+        borderColor: isHovered ? 'rgba(147,197,253,0.9)' : 'rgba(24,113,255,1)',
       }}
     >
       <div className={`w-1 h-1 bg-brand rounded-full transition-all duration-300 ${isHovered ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`} />

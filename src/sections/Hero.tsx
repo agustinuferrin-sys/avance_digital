@@ -24,6 +24,8 @@ export const Hero: React.FC = () => {
         />
       </div>
 
+      <div className="absolute inset-0 z-0 bg-black/25 pointer-events-none" />
+
       {/* Vignette oscuro, solo detrás del texto, para mantener la legibilidad del titular */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_45%,_rgba(0,0,0,0.6)_0%,_rgba(0,0,0,0.2)_45%,_transparent_75%)] pointer-events-none" />
 

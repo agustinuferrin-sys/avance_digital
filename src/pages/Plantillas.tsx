@@ -97,7 +97,7 @@ export default function Plantillas() {
                     <p className="text-sm text-red-400">Hubo un problema al enviar. Probá de nuevo.</p>
                   )}
                   
-                  <Button onClick={handleSubmit} disabled={status === 'sending' || !formData.email} className="w-full mt-4 py-4 text-base font-bold shadow-[0_0_30px_rgba(27,77,228,0.2)] hover:shadow-[0_0_40px_rgba(27,77,228,0.4)] disabled:opacity-60">
+                  <Button onClick={handleSubmit} disabled={status === 'sending' || !formData.email} className="w-full mt-4 py-4 text-base font-bold shadow-[0_0_30px_rgba(24,113,255,0.2)] hover:shadow-[0_0_40px_rgba(24,113,255,0.4)] disabled:opacity-60">
                     {status === 'sending' ? 'Enviando...' : 'Quiero enterarme'}
                   </Button>
                 </div>

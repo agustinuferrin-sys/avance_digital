@@ -130,7 +130,7 @@ const ProyectoDetalle: React.FC = () => {
 
         {/* CTA */}
         <Reveal delay={0.1}>
-          <div className="mt-24 rounded-card bg-gradient-to-br from-navy to-bg border border-brand/20 p-10 md:p-16 text-center shadow-[0_0_60px_rgba(27,77,228,0.1)]">
+          <div className="mt-24 rounded-card bg-gradient-to-br from-navy to-bg border border-brand/20 p-10 md:p-16 text-center shadow-[0_0_60px_rgba(24,113,255,0.1)]">
             <h2 className="font-display font-black text-3xl md:text-4xl mb-4">¿Querés un proyecto así?</h2>
             <p className="text-muted mb-10 max-w-xl mx-auto">Contanos qué tenés en mente y armamos el plan para que tu marca avance.</p>
             <Button onClick={goToContacto} className="px-8 py-3">

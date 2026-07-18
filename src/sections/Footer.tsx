@@ -69,7 +69,7 @@ export const Footer: React.FC = () => {
           <p className="text-muted font-light mb-6">¿Listo para que tu marca avance?</p>
           <button
             onClick={scrollToContacto}
-            className="shine-btn group flex items-center gap-2 bg-brand text-white px-6 py-3 rounded-full font-bold text-sm tracking-wide border border-white/30 hover:bg-brandAlt hover:border-white/60 transition-colors shadow-[0_0_20px_rgba(27,77,228,0.3)] hover:shadow-[0_0_30px_rgba(27,77,228,0.5)]"
+            className="shine-btn group flex items-center gap-2 bg-brand text-white px-6 py-3 rounded-full font-bold text-sm tracking-wide border border-white/30 hover:bg-brandAlt hover:border-white/60 transition-colors shadow-[0_0_20px_rgba(24,113,255,0.3)] hover:shadow-[0_0_30px_rgba(24,113,255,0.5)]"
           >
             AVANCEMOS
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

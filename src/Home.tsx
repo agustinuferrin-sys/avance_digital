@@ -17,9 +17,9 @@ export default function Home() {
       <Hero />
       <Filosofia />
       <Iceberg />
+      <SistemaAvance />
       <Servicios />
       <Metricas />
-      <SistemaAvance />
       <Manifiesto />
       <Clientes />
       <Proyectos />

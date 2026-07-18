@@ -26,8 +26,8 @@ export const Navbar: React.FC = () => {
   };
 
   const links: { id: string; label: string }[] = [
-    { id: 'servicios', label: 'SERVICIOS' },
     { id: 'sistema', label: 'MÉTODO AVANCE®' },
+    { id: 'servicios', label: 'SERVICIOS' },
     { id: 'proyectos', label: 'PROYECTOS' },
     { id: 'es-para-vos', label: 'ABOUT' },
     { id: 'faq', label: "FAQ'S" },

@@ -38,6 +38,13 @@ const ITEM_GAP_REM = 0.9;
 // columnas no queden a la misma altura exacta (efecto demasiado simétrico).
 const RIGHT_COLUMN_OFFSET_PX = 22;
 
+// Cuánto entra hacia el centro (en rem) el tramo línea+punto de CADA item,
+// mismo valor para toda fila de las dos zonas: todos los puntos caen sobre
+// el mismo eje vertical, justo en el centro del gutter, desde la punta de
+// arriba hasta el fondo de la masa sumergida — no sobre el borde de su
+// columna (que es donde caían con reach 0).
+const DOT_REACH_REM = GUTTER_REM / 2;
+
 // Separación (en px) entre el cierre de Filosofia (la marquee celeste
 // "ESTRATÉGIA › RESULTADOS › AVANZÁ › MÉTODO") y el arranque visual del
 // iceberg. Vive DENTRO del stage —como una franja extra arriba, con imagen y
@@ -59,19 +66,20 @@ const STAGE_HEIGHT_VH = 150;
 // "LO QUE HACEMOS", para que respire más contra "LO QUE SE VE" sin tocarla).
 const SUBTITLE_GAP_PX = 4;
 
-// Los primeros items de la lista van a la columna IZQUIERDA y el resto a la
-// DERECHA — misma regla para las dos zonas:
-//   LO QUE SE VE   (7 items) → 3 izquierda / 4 derecha
-//   LO QUE HACEMOS (9 items) → 4 izquierda / 5 derecha
-// Verificado: left.length + right.length === items.length siempre (slice
-// contiguo sin filtrar nada, no se descarta ningún índice).
+// Los items alternan de columna en el orden en que están escritos en la
+// lista — el 1° a la IZQUIERDA, el 2° a la DERECHA, el 3° de nuevo a la
+// IZQUIERDA, etc. — misma regla para las dos zonas:
+//   LO QUE SE VE   (7 items) → 4 izquierda / 3 derecha
+//   LO QUE HACEMOS (9 items) → 5 izquierda / 4 derecha
+// Verificado: left.length + right.length === items.length siempre (cada
+// índice cae en un solo lado, no se descarta ninguno).
 const splitItems = (items: string[]): { left: string[]; right: string[] } => {
-  const leftCount = Math.floor(items.length / 2);
-  const left = items.slice(0, leftCount);
-  const right = items.slice(leftCount);
+  const left = items.filter((_, i) => i % 2 === 0);
+  const right = items.filter((_, i) => i % 2 !== 0);
   if (left.length + right.length !== items.length) {
-    // No debería poder pasar (slice contiguo), pero si algún día cambia la
-    // regla de split, esto avisa en desarrollo en vez de perder items en silencio.
+    // No debería poder pasar (cada índice va a un lado u otro), pero si algún
+    // día cambia la regla de split, esto avisa en desarrollo en vez de perder
+    // items en silencio.
     console.error('[Iceberg] splitItems perdió items:', { items, left, right });
   }
   return { left, right };
@@ -97,26 +105,37 @@ const lineVariants = {
 
 // Fila de un item. Línea (grosor/punteado/opacidad) y punto IDÉNTICOS para
 // las dos columnas — lo único que cambia es el ORDEN visual: el punto
-// siempre queda del lado que apunta al iceberg. La línea es flex-1 (100%
-// del ancho disponible en la fila) en vez de un ancho fijo: al ocupar toda
-// la fila (w-full), el punto queda pegado al borde de la columna sin
-// importar cuánto texto tenga el label.
-const LeaderItem: React.FC<{ label: string; direction: 'left' | 'right' }> = ({ label, direction }) => {
+// siempre queda del lado que apunta al iceberg. El tramo punto+línea vive en
+// su propio wrapper (flex-1, mismo ancho que ocupaba la línea sola antes) y
+// es el único que se traslada hacia el centro vía `reachRem`, con transform
+// (no width/margin) para no tocar el layout del grid — el label queda fuera
+// de ese wrapper, fijo en su lugar, así nunca se desalinea de su columna.
+const LeaderItem: React.FC<{ label: string; direction: 'left' | 'right'; reachRem?: number }> = ({
+  label,
+  direction,
+  reachRem = 0,
+}) => {
   const isLeft = direction === 'left';
+  const translateX = isLeft ? reachRem : -reachRem;
   return (
     <motion.div
       variants={itemVariants(direction)}
       className={`flex items-center gap-3 w-full ${isLeft ? 'flex-row-reverse' : ''}`}
     >
-      <span className="w-2 h-2 rounded-full border border-white/60 shrink-0" />
-      <motion.span
-        variants={lineVariants}
-        style={{
-          transformOrigin: isLeft ? 'right' : 'left',
-          borderTop: '1px dashed rgba(255,255,255,0.25)',
-        }}
-        className="h-px flex-1 min-w-0"
-      />
+      <div
+        className={`flex items-center gap-3 flex-1 min-w-0 ${isLeft ? 'flex-row-reverse' : ''}`}
+        style={{ transform: `translateX(${translateX}rem)` }}
+      >
+        <span className="w-2 h-2 rounded-full border border-white/60 shrink-0" />
+        <motion.span
+          variants={lineVariants}
+          style={{
+            transformOrigin: isLeft ? 'right' : 'left',
+            borderTop: '1px dashed rgba(255,255,255,0.25)',
+          }}
+          className="h-px flex-1 min-w-0"
+        />
+      </div>
       <span
         className={`text-white/85 font-body font-light text-base md:text-xl lg:text-2xl whitespace-nowrap ${
           isLeft ? 'text-right' : 'text-left'
@@ -156,11 +175,12 @@ const TypewriterPhrase: React.FC<{ text: string }> = ({ text }) => {
 // del grid de 3 columnas de TextZone. Ambas comparten TODO: gap vertical,
 // flex-col simple sin posicionamiento propio — el grid padre es quien decide
 // dónde cae cada columna, esta solo apila sus items.
-const ItemColumn: React.FC<{ items: string[]; direction: 'left' | 'right'; style?: React.CSSProperties }> = ({
-  items,
-  direction,
-  style,
-}) => {
+const ItemColumn: React.FC<{
+  items: string[];
+  direction: 'left' | 'right';
+  style?: React.CSSProperties;
+  reachRem?: number;
+}> = ({ items, direction, style, reachRem = 0 }) => {
   return (
     <motion.div
       className="flex flex-col"
@@ -171,7 +191,7 @@ const ItemColumn: React.FC<{ items: string[]; direction: 'left' | 'right'; style
       variants={listVariants}
     >
       {items.map((label) => (
-        <LeaderItem key={label} label={label} direction={direction} />
+        <LeaderItem key={label} label={label} direction={direction} reachRem={reachRem} />
       ))}
     </motion.div>
   );
@@ -191,7 +211,17 @@ const TextZone: React.FC<{
   items: string[];
   subtitleGapExtraPx?: number;
   columnsTopExtraPx?: number;
-}> = ({ top, height, title, subtitle, items, subtitleGapExtraPx = 0, columnsTopExtraPx = 0 }) => {
+  reachRem?: number;
+}> = ({
+  top,
+  height,
+  title,
+  subtitle,
+  items,
+  subtitleGapExtraPx = 0,
+  columnsTopExtraPx = 0,
+  reachRem = 0,
+}) => {
   const { left, right } = splitItems(items);
 
   return (
@@ -243,9 +273,14 @@ const TextZone: React.FC<{
             gridTemplateColumns: `1fr ${GUTTER_REM}rem 1fr`,
           }}
         >
-          <ItemColumn items={left} direction="left" />
+          <ItemColumn items={left} direction="left" reachRem={reachRem} />
           <div aria-hidden="true" />
-          <ItemColumn items={right} direction="right" style={{ marginTop: `${RIGHT_COLUMN_OFFSET_PX}px` }} />
+          <ItemColumn
+            items={right}
+            direction="right"
+            style={{ marginTop: `${RIGHT_COLUMN_OFFSET_PX}px` }}
+            reachRem={reachRem}
+          />
         </div>
       </div>
     </div>
@@ -300,6 +335,7 @@ export const Iceberg: React.FC = () => {
             title="LO QUE SE VE"
             subtitle="Es solo una parte"
             items={itemsArriba}
+            reachRem={DOT_REACH_REM}
           />
           <TextZone
             top={`${WATERLINE_PERCENT + BAND_GAP_PERCENT / 2}%`}
@@ -309,6 +345,7 @@ export const Iceberg: React.FC = () => {
             items={itemsAbajo}
             subtitleGapExtraPx={20}
             columnsTopExtraPx={132}
+            reachRem={DOT_REACH_REM}
           />
         </div>
       </div>
@@ -324,11 +361,6 @@ export const Iceberg: React.FC = () => {
           </Button>
         </div>
       </div>
-
-      {/* TRANSICIÓN — difumina el negro de esta sección hacia el mist claro de
-          Servicios (la próxima sección), para que el cambio oscuro→claro no
-          sea un corte seco. */}
-      <div className="h-24 md:h-32 bg-gradient-to-b from-bg to-mist" aria-hidden="true" />
     </section>
   );
 };

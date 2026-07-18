@@ -13,68 +13,18 @@ interface PillCardProps {
 const PillCard: React.FC<PillCardProps> = ({ step, variant }) => (
   <div
     className={cn(
-      'relative flex flex-col justify-center min-h-[171px] md:min-h-[198px] rounded-pill px-8 py-8 md:px-9 md:py-9 transition-all duration-300 hover:brightness-110 text-white',
+      'relative flex flex-col justify-center min-h-[112px] md:min-h-[132px] rounded-pill px-6 py-5 md:px-7 md:py-6 transition-all duration-300 hover:brightness-110 text-white',
       variant === 'blue'
-        ? 'bg-gradient-to-br from-brand to-brandAlt shadow-[0_0_40px_rgba(27,77,228,0.3)]'
+        ? 'bg-gradient-to-br from-brand to-brandAlt shadow-[0_0_40px_rgba(24,113,255,0.3)]'
         : 'bg-bg border border-white/10'
     )}
   >
-    <span className={cn('font-display font-black text-4xl md:text-5xl mb-3', variant === 'blue' ? 'text-white/30' : 'text-brand/40')}>
-      {step.número}
-    </span>
-    <h3 className="font-display font-bold text-xl md:text-2xl mb-2">{step.título}</h3>
-    <p className={cn('text-sm md:text-base font-body leading-relaxed', variant === 'blue' ? 'text-white/85' : 'text-white/70')}>
+    <h3 className="font-display font-bold text-2xl md:text-3xl mb-2">{step.título}</h3>
+    <p className={cn('text-xs md:text-sm font-body leading-relaxed', variant === 'blue' ? 'text-white/85' : 'text-white/70')}>
       {step.descripción}
     </p>
   </div>
 );
-
-// geometría de los tubos: conector orgánico tipo "cuello de reloj de arena" entre dos
-// puntos cualquiera (recto, diagonal, lo que haga falta) — nace fino desde el borde de
-// una pill, se mantiene angosto, y se ensancha recién al fundirse con la siguiente.
-const OVERLAP = 16;
-const FLARE = 18;
-const NECK = 5;
-const MOBILE_OVERLAP = 10;
-const MOBILE_TUBE_WIDTH = 4;
-
-function capsuleTube(x1: number, y1: number, x2: number, y2: number): string {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const len = Math.hypot(dx, dy) || 1;
-  const ux = dx / len;
-  const uy = dy / len;
-  const px = -uy;
-  const py = ux;
-
-  const ax = x1 - ux * OVERLAP;
-  const ay = y1 - uy * OVERLAP;
-  const bx = x2 + ux * OVERLAP;
-  const by = y2 + uy * OVERLAP;
-  const midx = (ax + bx) / 2;
-  const midy = (ay + by) / 2;
-  const segLen = Math.hypot(bx - ax, by - ay);
-  const k = segLen * 0.32;
-  const cx = ux * k;
-  const cy = uy * k;
-
-  const aLx = ax + px * FLARE, aLy = ay + py * FLARE;
-  const aRx = ax - px * FLARE, aRy = ay - py * FLARE;
-  const mLx = midx + px * NECK, mLy = midy + py * NECK;
-  const mRx = midx - px * NECK, mRy = midy - py * NECK;
-  const bLx = bx + px * FLARE, bLy = by + py * FLARE;
-  const bRx = bx - px * FLARE, bRy = by - py * FLARE;
-
-  return [
-    `M ${aLx} ${aLy}`,
-    `C ${aLx + cx} ${aLy + cy}, ${mLx - cx} ${mLy - cy}, ${mLx} ${mLy}`,
-    `C ${mLx + cx} ${mLy + cy}, ${bLx - cx} ${bLy - cy}, ${bLx} ${bLy}`,
-    `L ${bRx} ${bRy}`,
-    `C ${bRx - cx} ${bRy - cy}, ${mRx + cx} ${mRy + cy}, ${mRx} ${mRy}`,
-    `C ${mRx - cx} ${mRy - cy}, ${aRx + cx} ${aRy + cy}, ${aRx} ${aRy}`,
-    'Z',
-  ].join(' ');
-}
 
 interface Box {
   top: number;
@@ -93,25 +43,81 @@ function boxOf(el: HTMLElement): Box {
   return { top, bottom: top + height, left, right: left + width, centerX: left + width / 2, centerY: top + height / 2 };
 }
 
-interface DesktopTubes {
-  width: number;
-  height: number;
-  a: string;
-  b: string;
-  c: string;
-  d: string;
-  gradient1: { x1: number; y1: number; x2: number; y2: number };
-}
-
-interface MobileTube {
+interface ImgBox {
   left: number;
   top: number;
+  width: number;
   height: number;
 }
 
-// 9 pasos del scroll-scrub: cuadro, tubo, cuadro, tubo... hasta el 5to cuadro.
-// Cada elemento se revela atado al progreso real del scroll dentro de la sección (reversible).
-const TOTAL_STEPS = 9;
+interface DesktopConnectors {
+  tailEntender: ImgBox;
+  vConn1: ImgBox;
+  hConn1: ImgBox;
+  tailMedir: ImgBox;
+  vConn2: ImgBox;
+  hConn2: ImgBox;
+}
+
+// conectores: assets webp pre-renderizados por la diseñadora, posicionados con las medidas
+// reales de las cards (boxOf). Ya no se calculan tubos por código.
+const TAIL_HEIGHT_RATIO = 0.9; // alto de la cola respecto al alto de su card
+// rounded-pill es una cápsula: el borde izq/der de la card es un arco que retrocede hasta
+// radio = alto/2 en la punta. Un overlap fijo en px se queda corto ahí y asoma un filo de la
+// cola por detrás de la punta redondeada. Con overlap ≥ 0.5×alto (el radio) queda cubierta
+// para cualquier tamaño de card, sea cual sea el breakpoint.
+const TAIL_OVERLAP_RATIO = 0.6;
+const TAIL_BLEED = 6000; // ancho de sobra hacia la izquierda; el overflow-hidden de la sección la recorta en el borde real del viewport
+
+const VCONN_OVERLAP = 30; // cuánto entra cada extremo del conector vertical debajo de su card
+const VCONN_WIDTH_RATIO = 357 / 506; // proporción real de conector-v.webp (ancho/alto)
+
+const HCONN_OVERLAP = 15; // cuánto entra cada extremo del conector horizontal debajo de su card (menos que el vertical para que no se lo coma la card)
+const HCONN_HEIGHT_RATIO = 447 / 1558; // proporción real de conector-h.webp (alto/ancho)
+
+const MOBILE_OVERLAP = 20; // solape del conector vertical mobile sobre cada card
+const MOBILE_CONN_WIDTH_RATIO = 357 / 506; // misma proporción de conector-v.webp
+
+function tailBox(card: Box): ImgBox {
+  const cardHeight = card.bottom - card.top;
+  const height = cardHeight * TAIL_HEIGHT_RATIO;
+  const right = card.left + cardHeight * TAIL_OVERLAP_RATIO;
+  return { left: right - TAIL_BLEED, width: TAIL_BLEED, top: card.centerY - height / 2, height };
+}
+
+function vConnBox(top: Box, bottom: Box): ImgBox {
+  const topY = top.bottom - VCONN_OVERLAP;
+  const bottomY = bottom.top + VCONN_OVERLAP;
+  const height = Math.max(bottomY - topY, 0);
+  const width = height * VCONN_WIDTH_RATIO;
+  const centerX = (top.centerX + bottom.centerX) / 2;
+  return { left: centerX - width / 2, top: topY, width, height };
+}
+
+function hConnBox(left: Box, right: Box): ImgBox {
+  const leftX = left.right - HCONN_OVERLAP;
+  const rightX = right.left + HCONN_OVERLAP;
+  const width = Math.max(rightX - leftX, 0);
+  const height = width * HCONN_HEIGHT_RATIO;
+  const centerY = (left.centerY + right.centerY) / 2;
+  return { left: leftX, top: centerY - height / 2, width, height };
+}
+
+function mobileConnBox(top: Box, bottom: Box): ImgBox {
+  const topY = top.bottom - MOBILE_OVERLAP;
+  const bottomY = bottom.top + MOBILE_OVERLAP;
+  const height = Math.max(bottomY - topY, 0);
+  const width = height * MOBILE_CONN_WIDTH_RATIO;
+  const centerX = (top.centerX + bottom.centerX) / 2;
+  return { left: centerX - width / 2, top: topY, width, height };
+}
+
+// 5 pasos del scroll-scrub: en cada paso aparecen JUNTOS el conector entrante y su card
+// (antes alternaba conector/card por separado y dejaba el último cuadro ilegible).
+// Atado 1:1 al progreso real del scroll dentro de la sección (reversible).
+const TOTAL_STEPS = 5;
+const SCROLL_OFFSET_START = 'start 0.75';
+const SCROLL_OFFSET_END = 'center 0.5';
 
 function useStepAnim(progress: MotionValue<number>, index: number) {
   const t0 = index / TOTAL_STEPS;
@@ -131,8 +137,8 @@ export const SistemaAvance: React.FC = () => {
   const medirRef = useRef<HTMLDivElement>(null);
   const escalarRef = useRef<HTMLDivElement>(null);
 
-  const [desktopTubes, setDesktopTubes] = useState<DesktopTubes | null>(null);
-  const [mobileTubes, setMobileTubes] = useState<MobileTube[] | null>(null);
+  const [desktopConnectors, setDesktopConnectors] = useState<DesktopConnectors | null>(null);
+  const [mobileConnectors, setMobileConnectors] = useState<ImgBox[] | null>(null);
 
   const measure = useCallback(() => {
     const wrapper = wrapperRef.current;
@@ -149,24 +155,20 @@ export const SistemaAvance: React.FC = () => {
     const m = boxOf(medirEl);
     const es = boxOf(escalarEl);
 
-    // tubo 1 sale del borde izquierdo de "Entender" (difuminado) hacia el borde superior de "Ordenar"
-    const g1 = { x1: e.left, y1: e.centerY, x2: o.centerX, y2: o.top };
-
-    setDesktopTubes({
-      width: wrapper.offsetWidth,
-      height: wrapper.offsetHeight,
-      a: capsuleTube(g1.x1, g1.y1, g1.x2, g1.y2),
-      b: capsuleTube(o.right, o.centerY, ej.left, ej.centerY),
-      c: capsuleTube(ej.centerX, ej.bottom, m.centerX, m.top),
-      d: capsuleTube(m.left, m.centerY, es.right, es.centerY),
-      gradient1: g1,
+    setDesktopConnectors({
+      tailEntender: tailBox(e),
+      vConn1: vConnBox(e, o),
+      hConn1: hConnBox(o, ej),
+      tailMedir: tailBox(m),
+      vConn2: vConnBox(ej, es),
+      hConn2: hConnBox(m, es),
     });
 
-    setMobileTubes([
-      { left: e.centerX - MOBILE_TUBE_WIDTH / 2, top: e.bottom - MOBILE_OVERLAP, height: o.top - e.bottom + 2 * MOBILE_OVERLAP },
-      { left: o.centerX - MOBILE_TUBE_WIDTH / 2, top: o.bottom - MOBILE_OVERLAP, height: ej.top - o.bottom + 2 * MOBILE_OVERLAP },
-      { left: ej.centerX - MOBILE_TUBE_WIDTH / 2, top: ej.bottom - MOBILE_OVERLAP, height: m.top - ej.bottom + 2 * MOBILE_OVERLAP },
-      { left: m.centerX - MOBILE_TUBE_WIDTH / 2, top: m.bottom - MOBILE_OVERLAP, height: es.top - m.bottom + 2 * MOBILE_OVERLAP },
+    setMobileConnectors([
+      mobileConnBox(e, o),
+      mobileConnBox(o, ej),
+      mobileConnBox(ej, m),
+      mobileConnBox(m, es),
     ]);
   }, []);
 
@@ -184,17 +186,13 @@ export const SistemaAvance: React.FC = () => {
     };
   }, [measure]);
 
-  const { scrollYProgress } = useScroll({ target: wrapperRef, offset: ['start 0.8', 'end 0.5'] });
+  const { scrollYProgress } = useScroll({ target: wrapperRef, offset: [SCROLL_OFFSET_START, SCROLL_OFFSET_END] });
 
-  const entenderAnim = useStepAnim(scrollYProgress, 0);
-  const tube1Anim = useStepAnim(scrollYProgress, 1);
-  const ordenarAnim = useStepAnim(scrollYProgress, 2);
-  const tube2Anim = useStepAnim(scrollYProgress, 3);
-  const ejecutarAnim = useStepAnim(scrollYProgress, 4);
-  const tube3Anim = useStepAnim(scrollYProgress, 5);
-  const medirAnim = useStepAnim(scrollYProgress, 6);
-  const tube4Anim = useStepAnim(scrollYProgress, 7);
-  const escalarAnim = useStepAnim(scrollYProgress, 8);
+  const step1 = useStepAnim(scrollYProgress, 0); // cola-entender + card Entender
+  const step2 = useStepAnim(scrollYProgress, 1); // conector vertical 1 + card Ordenar
+  const step3 = useStepAnim(scrollYProgress, 2); // conector horizontal 1 + card Ejecutar
+  const step4 = useStepAnim(scrollYProgress, 3); // cola-medir + card Medir
+  const step5 = useStepAnim(scrollYProgress, 4); // conector vertical 2 + horizontal 2 + card Escalar
 
   return (
     <section id="sistema" className="pt-24 md:pt-32 bg-bg relative overflow-hidden flex flex-col">
@@ -227,87 +225,100 @@ export const SistemaAvance: React.FC = () => {
           <div className="mt-8 md:mt-10 h-px w-full bg-white/10" />
         </Reveal>
 
-        {/* Cadena de 5 cuadros iguales conectados por tubos: todo el reveal (cuadro→tubo→cuadro...)
-            queda atado 1:1 al progreso real del scroll dentro de esta sección */}
+        {/* Cadena de 5 cuadros conectados por assets webp (colas/conectores), todo el reveal
+            (conector+card juntos) queda atado 1:1 al progreso real del scroll dentro de esta sección */}
         <div ref={wrapperRef} className="mt-12 md:mt-16 relative">
-          {/* tubos desktop: cápsulas bezier "hueso de perro", detrás de las pills */}
-          {desktopTubes && (
-            <svg
-              className="absolute inset-0 hidden md:block pointer-events-none z-0"
-              width={desktopTubes.width}
-              height={desktopTubes.height}
-              viewBox={`0 0 ${desktopTubes.width} ${desktopTubes.height}`}
-              aria-hidden="true"
-              focusable="false"
-            >
-              <defs>
-                <linearGradient
-                  id="tube1-fade"
-                  gradientUnits="userSpaceOnUse"
-                  x1={desktopTubes.gradient1.x1}
-                  y1={desktopTubes.gradient1.y1}
-                  x2={desktopTubes.gradient1.x2}
-                  y2={desktopTubes.gradient1.y2}
-                >
-                  <stop offset="0%" stopColor="var(--color-brand)" stopOpacity="0" />
-                  <stop offset="100%" stopColor="var(--color-brand)" stopOpacity="1" />
-                </linearGradient>
-                {/* mismo degradé diagonal brand→brandAlt que llevan las pills rellenas,
-                    para que el tubo se funda con el color real del borde de la pill y no
-                    quede una costura de color donde se supone que es una sola masa */}
-                <linearGradient id="tube-fill-diag" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="var(--color-brand)" />
-                  <stop offset="100%" stopColor="var(--color-brandAlt)" />
-                </linearGradient>
-              </defs>
-              <motion.path d={desktopTubes.a} fill="url(#tube1-fade)" style={{ opacity: tube1Anim.opacity }} />
-              <motion.path d={desktopTubes.b} fill="url(#tube-fill-diag)" style={{ opacity: tube2Anim.opacity }} />
-              <motion.path d={desktopTubes.c} fill="url(#tube-fill-diag)" style={{ opacity: tube3Anim.opacity }} />
-              <motion.path d={desktopTubes.d} fill="url(#tube-fill-diag)" style={{ opacity: tube4Anim.opacity }} />
-            </svg>
-          )}
-
-          {/* tubos mobile: líneas rectas entre pills consecutivas (layout de una sola columna) */}
-          {mobileTubes && (
-            <div className="absolute inset-0 md:hidden pointer-events-none z-0" aria-hidden="true">
-              <motion.div
-                className="absolute bg-brand rounded-full"
-                style={{ left: mobileTubes[0].left, top: mobileTubes[0].top, width: MOBILE_TUBE_WIDTH, height: Math.max(mobileTubes[0].height, 0), opacity: tube1Anim.opacity }}
+          {/* conectores desktop: imágenes webp detrás de las cards, que al ser opacas tapan el solape */}
+          {desktopConnectors && (
+            <div className="absolute inset-0 hidden md:block z-0 pointer-events-none" aria-hidden="true">
+              <motion.img
+                src="/images/metodo/cola-entender.webp"
+                alt=""
+                className="absolute object-fill"
+                style={{ ...desktopConnectors.tailEntender, opacity: step1.opacity }}
               />
-              <motion.div
-                className="absolute bg-brand rounded-full"
-                style={{ left: mobileTubes[1].left, top: mobileTubes[1].top, width: MOBILE_TUBE_WIDTH, height: Math.max(mobileTubes[1].height, 0), opacity: tube2Anim.opacity }}
+              <motion.img
+                src="/images/metodo/conector-v.webp"
+                alt=""
+                className="absolute object-fill"
+                style={{ ...desktopConnectors.vConn1, opacity: step2.opacity }}
               />
-              <motion.div
-                className="absolute bg-brand rounded-full"
-                style={{ left: mobileTubes[2].left, top: mobileTubes[2].top, width: MOBILE_TUBE_WIDTH, height: Math.max(mobileTubes[2].height, 0), opacity: tube3Anim.opacity }}
+              <motion.img
+                src="/images/metodo/conector-h.webp"
+                alt=""
+                className="absolute object-fill"
+                style={{ ...desktopConnectors.hConn1, opacity: step3.opacity }}
               />
-              <motion.div
-                className="absolute bg-brand rounded-full"
-                style={{ left: mobileTubes[3].left, top: mobileTubes[3].top, width: MOBILE_TUBE_WIDTH, height: Math.max(mobileTubes[3].height, 0), opacity: tube4Anim.opacity }}
+              <motion.img
+                src="/images/metodo/cola-medir.webp"
+                alt=""
+                className="absolute object-fill"
+                style={{ ...desktopConnectors.tailMedir, opacity: step4.opacity }}
+              />
+              <motion.img
+                src="/images/metodo/conector-v.webp"
+                alt=""
+                className="absolute object-fill"
+                style={{ ...desktopConnectors.vConn2, opacity: step5.opacity }}
+              />
+              <motion.img
+                src="/images/metodo/conector-h.webp"
+                alt=""
+                className="absolute object-fill"
+                style={{ ...desktopConnectors.hConn2, opacity: step5.opacity }}
               />
             </div>
           )}
 
-          {/* grid explícito 2 columnas x 3 filas: "Entender" solo ocupa fila 1 columna 1,
-              todos los cuadros del mismo tamaño; en mobile cae a columna única en orden 1→5 */}
-          <div className="relative z-10 grid gap-x-3 gap-y-4 md:gap-x-4 md:gap-y-[22px] md:grid-cols-2 md:grid-rows-3">
-            <motion.div ref={entenderRef} className="md:col-start-1 md:row-start-1" style={{ opacity: entenderAnim.opacity, y: entenderAnim.y }}>
+          {/* conectores mobile: conector-v.webp estirado entre cards consecutivas (columna única) */}
+          {mobileConnectors && (
+            <div className="absolute inset-0 md:hidden z-0 pointer-events-none" aria-hidden="true">
+              <motion.img
+                src="/images/metodo/conector-v.webp"
+                alt=""
+                className="absolute object-fill"
+                style={{ ...mobileConnectors[0], opacity: step2.opacity }}
+              />
+              <motion.img
+                src="/images/metodo/conector-v.webp"
+                alt=""
+                className="absolute object-fill"
+                style={{ ...mobileConnectors[1], opacity: step3.opacity }}
+              />
+              <motion.img
+                src="/images/metodo/conector-v.webp"
+                alt=""
+                className="absolute object-fill"
+                style={{ ...mobileConnectors[2], opacity: step4.opacity }}
+              />
+              <motion.img
+                src="/images/metodo/conector-v.webp"
+                alt=""
+                className="absolute object-fill"
+                style={{ ...mobileConnectors[3], opacity: step5.opacity }}
+              />
+            </div>
+          )}
+
+          {/* grid explícito 2 columnas x 3 filas: Entender ocupa fila 1 columna 1, todos los
+              cuadros del mismo tamaño; en mobile cae a columna única en orden 1→5 */}
+          <div className="relative z-10 grid gap-x-3 gap-y-8 md:gap-x-16 md:gap-y-10 md:grid-cols-2 md:grid-rows-3">
+            <motion.div ref={entenderRef} className="md:col-start-1 md:row-start-1" style={{ opacity: step1.opacity, y: step1.y }}>
               <PillCard step={entender} variant="blue" />
             </motion.div>
 
-            <motion.div ref={ordenarRef} className="md:col-start-1 md:row-start-2" style={{ opacity: ordenarAnim.opacity, y: ordenarAnim.y }}>
+            <motion.div ref={ordenarRef} className="md:col-start-1 md:row-start-2" style={{ opacity: step2.opacity, y: step2.y }}>
               <PillCard step={ordenar} variant="black" />
             </motion.div>
-            <motion.div ref={ejecutarRef} className="md:col-start-2 md:row-start-2" style={{ opacity: ejecutarAnim.opacity, y: ejecutarAnim.y }}>
+            <motion.div ref={ejecutarRef} className="md:col-start-2 md:row-start-2" style={{ opacity: step3.opacity, y: step3.y }}>
               <PillCard step={ejecutar} variant="blue" />
             </motion.div>
 
-            <motion.div ref={medirRef} className="md:col-start-2 md:row-start-3" style={{ opacity: medirAnim.opacity, y: medirAnim.y }}>
-              <PillCard step={medir} variant="black" />
+            <motion.div ref={medirRef} className="md:col-start-1 md:row-start-3" style={{ opacity: step4.opacity, y: step4.y }}>
+              <PillCard step={medir} variant="blue" />
             </motion.div>
-            <motion.div ref={escalarRef} className="md:col-start-1 md:row-start-3" style={{ opacity: escalarAnim.opacity, y: escalarAnim.y }}>
-              <PillCard step={escalar} variant="blue" />
+            <motion.div ref={escalarRef} className="md:col-start-2 md:row-start-3" style={{ opacity: step5.opacity, y: step5.y }}>
+              <PillCard step={escalar} variant="black" />
             </motion.div>
           </div>
         </div>

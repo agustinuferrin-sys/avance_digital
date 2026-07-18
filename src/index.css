@@ -4,17 +4,19 @@
 
 @theme {
   --color-navy: #0A1A3F;
-  --color-bg: #0A0A0A;
-  --color-brand: #1B4DE4;
-  --color-brandAlt: #2563EB;
+  --color-bg: #000000;
+  --color-brand: #1871FF;
+  --color-brandAlt: #4E93FB;
   --color-blue: #3B82F6;
   --color-skyLight: #93C5FD;
   --color-white: #FFFFFF;
   --color-muted: #A0AEC0;
   --color-mist: #DFE0E8;
-  --color-ink: #0A0A0A;
+  --color-ink: #000000;
   --color-chromeLight: #E8E8E8;
   --color-chromeDark: #4A4A4A;
+  --color-cardBlue: #0159DF;
+  --color-cardBlueLight: #4E93FB;
 
   --font-display: "Poppins", sans-serif;
   --font-body: "Poppins", sans-serif;
@@ -28,15 +30,15 @@
 @layer base {
   body {
     @apply bg-bg text-white font-body;
-    background-color: var(--color-bg, #0A0A0A);
+    background-color: var(--color-bg, #000000);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(27, 77, 228, 0.0); }
-  50%      { box-shadow: 0 0 22px 3px rgba(27, 77, 228, 0.55); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(24, 113, 255, 0.0); }
+  50%      { box-shadow: 0 0 22px 3px rgba(24, 113, 255, 0.55); }
 }
 
 .animate-pulse-glow {
@@ -84,4 +86,35 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .shine-btn:hover::before { animation: none; }
+}
+
+/* Servicios: glow de 3 puntos de luz (radial-gradients superpuestos) en vez del gradiente
+   lineal simple. Terna de colores: destello brillante, resplandor medio y una presencia
+   chica de negro difuminado (la que menos lugar ocupa, por eso funde a transparente antes
+   que las otras dos). 3 variantes que alternan la esquina de cada punto de luz para que
+   ninguna card sea idéntica a su vecina. */
+.card-glow {
+  background-color: #020216;
+  overflow: hidden;
+}
+
+.card-glow--a {
+  background-image:
+    radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 40%),
+    radial-gradient(circle at top right, rgba(0, 212, 255, 0.9) 0%, rgba(0, 212, 255, 0) 60%),
+    radial-gradient(circle at bottom left, rgba(18, 55, 162, 0.8) 0%, rgba(18, 55, 162, 0) 70%);
+}
+
+.card-glow--b {
+  background-image:
+    radial-gradient(circle at top right, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 40%),
+    radial-gradient(circle at bottom right, rgba(0, 212, 255, 0.9) 0%, rgba(0, 212, 255, 0) 55%),
+    radial-gradient(circle at top left, rgba(18, 55, 162, 0.8) 0%, rgba(18, 55, 162, 0) 70%);
+}
+
+.card-glow--c {
+  background-image:
+    radial-gradient(circle at bottom left, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 40%),
+    radial-gradient(circle at top left, rgba(0, 212, 255, 0.9) 0%, rgba(0, 212, 255, 0) 50%),
+    radial-gradient(circle at bottom right, rgba(18, 55, 162, 0.8) 0%, rgba(18, 55, 162, 0) 70%);
 }

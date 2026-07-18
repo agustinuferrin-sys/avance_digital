@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, ArrowRight } from 'lucide-react';
+import { ArrowUpRight, ArrowRight, ArrowLeft } from 'lucide-react';
 import { SectionHeading } from '../components/SectionHeading';
 import { Reveal } from '../components/Reveal';
 import { projects } from '../data/projects';
@@ -92,6 +92,28 @@ export const Proyectos: React.FC = () => {
     }
   };
 
+  // loop infinito hacia atrás, simétrico a scrollNext: al retroceder desde el primer
+  // proyecto real (índice 0), saltamos sin animación al mismo proyecto pero en la
+  // segunda copia de la lista (índice projects.length, adyacente al final de la
+  // primera copia) y desde ahí animamos un paso más atrás, al último proyecto real.
+  const scrollPrev = () => {
+    const container = carouselRef.current;
+    if (!container || !projects.length) return;
+
+    if (pendingIndexRef.current === 0) {
+      const resetTarget = computeTargetScrollLeft(projects.length);
+      if (resetTarget !== null) container.scrollLeft = resetTarget;
+      pendingIndexRef.current = projects.length;
+    }
+
+    const prev = pendingIndexRef.current - 1;
+    pendingIndexRef.current = prev;
+    const target = computeTargetScrollLeft(prev);
+    if (target !== null) {
+      container.scrollTo({ left: target, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="proyectos" className="py-32 bg-navy relative">
       <div className="max-w-7xl mx-auto px-4 md:px-6 mb-12">
@@ -159,8 +181,20 @@ export const Proyectos: React.FC = () => {
             }}
           />
 
-          {/* Botón de navegación (flotante derecha, desktop y mobile) — loop infinito, nunca se desactiva */}
-          <div className="absolute right-4 md:right-8 xl:right-[calc((100vw-80rem)/2+2rem)] top-[calc(50%-1rem)] -translate-y-1/2 z-20 pointer-events-none opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100 transition-opacity duration-300">
+          {/* Botón de navegación IZQUIERDA (flotante, desktop y mobile) — espejo del de la
+              derecha: mismo loop infinito (ver scrollPrev), mismos estilos y visibilidad. */}
+          <div className="absolute left-2 md:left-4 top-[calc(50%-1rem)] -translate-y-1/2 z-20 pointer-events-none opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100 transition-opacity duration-300">
+             <button
+                onClick={scrollPrev}
+                className="relative w-12 h-12 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center text-navy shadow-[0_4px_30px_rgba(0,0,0,0.5)] pointer-events-auto hover:scale-105 active:scale-95 transition-transform hover:bg-brand hover:text-white before:content-[''] before:absolute before:inset-[-24px] md:before:inset-[-32px]"
+                aria-label="Proyecto anterior"
+              >
+                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
+              </button>
+          </div>
+
+          {/* Botón de navegación DERECHA (flotante, desktop y mobile) — loop infinito, nunca se desactiva */}
+          <div className="absolute right-2 md:right-4 top-[calc(50%-1rem)] -translate-y-1/2 z-20 pointer-events-none opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100 transition-opacity duration-300">
              <button
                 onClick={scrollNext}
                 className="relative w-12 h-12 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center text-navy shadow-[0_4px_30px_rgba(0,0,0,0.5)] pointer-events-auto hover:scale-105 active:scale-95 transition-transform hover:bg-brand hover:text-white before:content-[''] before:absolute before:inset-[-24px] md:before:inset-[-32px]"
